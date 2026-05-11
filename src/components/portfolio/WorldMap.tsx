@@ -65,7 +65,7 @@ export function WorldMap({
               onClick={() => onWarp(l)}
               title={`${l.name} — ${l.blurb}`}
               className="group relative flex shrink-0 flex-col items-center justify-center transition-transform hover:-translate-y-0.5"
-              style={{ width: 52 }}
+              style={{ width: 78 }}
             >
               {/* lantern flame above active */}
               {active && (
@@ -158,9 +158,9 @@ export function WorldMap({
                 )}
               </div>
 
-              {/* chapter name plank */}
+              {/* chapter name plank — always visible, full name */}
               <div
-                className="mt-1 hidden w-full truncate px-1 text-center text-[7px] uppercase tracking-wider sm:block"
+                className="mt-1 w-full truncate px-0.5 text-center text-[7px] uppercase tracking-wider sm:text-[8px]"
                 style={{ color: active ? l.palette.accent : "#fde2bf", textShadow: "1px 1px 0 #1a0a02" }}
               >
                 {l.name}

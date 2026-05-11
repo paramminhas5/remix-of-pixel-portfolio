@@ -49,7 +49,10 @@ export default function PixelPortfolio() {
   useEffect(ensureFonts, []);
 
   const { mode, setMode, viewMode, setViewMode, xp, addXp, nextUnlock, seenTitle, hardUnlocked, unlockHard } = usePortfolioMode();
-  const [titleOpen, setTitleOpen] = useState<boolean>(() => !seenTitle);
+  void seenTitle;
+  const [titleOpen, setTitleOpen] = useState<boolean>(true);
+  // Default to easy mode immediately so first-frame movement is fast & smooth.
+  useEffect(() => { if (!mode) setEngineMode("easy"); }, [mode]);
   const [contactOpen, setContactOpen] = useState(false);
   const [unlockToast, setUnlockToast] = useState<string | null>(null);
   const [skillToast, setSkillToast] = useState<{ skill: string; accent: string } | null>(null);

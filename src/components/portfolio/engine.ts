@@ -117,16 +117,16 @@ export function setEngineMode(mode: "easy" | "hard" | "quick") {
     TUNING.REQUIRE_CHARGE = false;
     TUNING.EASY_AUTOPILOT = true;
   } else if (mode === "easy") {
-    TUNING.GRAV = 0.42;
-    TUNING.MAX_FALL = 11;
-    TUNING.JUMP_MIN = 10;
-    TUNING.JUMP_MAX = 11;
-    TUNING.DOUBLE_JUMP_VY = -8.5;
-    TUNING.WALK_MAX = 4.0;
-    TUNING.RUN_MAX = 5.6;
-    TUNING.WALK_ACCEL = 0.85;
-    TUNING.RUN_ACCEL = 1.05;
-    TUNING.FRICTION = 0.82;
+    TUNING.GRAV = 0.5;
+    TUNING.MAX_FALL = 13;
+    TUNING.JUMP_MIN = 11;
+    TUNING.JUMP_MAX = 12;
+    TUNING.DOUBLE_JUMP_VY = -9.5;
+    TUNING.WALK_MAX = 5.4;
+    TUNING.RUN_MAX = 7.4;
+    TUNING.WALK_ACCEL = 1.1;
+    TUNING.RUN_ACCEL = 1.4;
+    TUNING.FRICTION = 0.86;
     TUNING.REQUIRE_CHARGE = false;
     TUNING.EASY_AUTOPILOT = true;
   } else {
