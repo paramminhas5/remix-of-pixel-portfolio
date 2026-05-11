@@ -1,4 +1,3 @@
-// Curated SoleSearch press — funding & brand coverage only (no forums/reddit).
 export type PressItem = {
   title: string;
   url: string;
@@ -8,39 +7,39 @@ export type PressItem = {
 
 export const SOLESEARCH_PRESS_FALLBACK: PressItem[] = [
   {
-    title: "SoleSearch raises $795K led by Venture Catalysts to scale sneaker culture in India",
-    source: "YourStory",
-    url: "https://yourstory.com/2022/04/sneaker-culture-startup-solesearch-funding-venture-catalysts",
-    snippet: "Funding round to expand retail and live events.",
+    title: "When Will India's Streetwear Scene Become Big Business?",
+    source: "Business of Fashion",
+    url: "https://businessoffashion.com/articles/global-markets/when-will-indias-streetwear-scene-become-big-business/",
+    snippet: "One likely contender is Param Minhas, co-founder of Mumbai-based SoleSearch. SoleSearch achieved ₹30–35 crore in sales last fiscal year.",
   },
   {
-    title: "How SoleSearch is building India's sneakerhead community",
+    title: "SoleSearch featured on Young Turks: Building India's sneaker culture",
     source: "CNBC-TV18",
     url: "https://www.cnbctv18.com/young-turks/solesearch-sneakers-streetwear-india-community-young-turks-15234571.htm",
-    snippet: "Featured on Young Turks for cultural impact.",
+    snippet: "Young Turks feature on how SoleSearch is defining India's sneaker and streetwear movement.",
+  },
+  {
+    title: "SoleSearch raises Rs 6 crore from Venture Catalysts, Anthill Ventures & Cornerstone",
+    source: "Entrackr",
+    url: "https://entrackr.com/?p=167386",
+    snippet: "Street culture brand SoleSearch has raised Rs 6 crore in its first funding round to scale online and offline.",
   },
   {
     title: "Rannvijay Singha joins SoleSearch as partner & investor",
     source: "Entrepreneur India",
     url: "https://www.entrepreneur.com/en-in/news-and-trends/rannvijay-singha-joins-solesearch/",
-    snippet: "MTV Roadies host invests in the streetwear & sneaker platform.",
+    snippet: "MTV Roadies host backs India's leading sneaker and streetwear platform.",
   },
   {
-    title: "Brand partners include Royal Enfield, boAt and Budweiser",
-    source: "Inc42",
-    url: "https://inc42.com/buzz/solesearch-india-sneaker-platform/",
-    snippet: "30+ live events, ₹1cr+ in event sales, 40+ homegrown labels onboarded.",
+    title: "SoleSearch raises Rs 6 crore to scale sneaker culture in India",
+    source: "Silicon India",
+    url: "https://startup.siliconindia.com/startup-funding/solesearch-raises-rs-6-crore-funding-from-venture-catalyst-others-nwid-38533.html",
+    snippet: "Param Minhas: We are attempting to redefine Indian street culture.",
   },
   {
-    title: "SoleSearch Street: a marketplace for India's homegrown brands",
-    source: "Economic Times",
-    url: "https://economictimes.indiatimes.com/small-biz/startups/newsbuzz/solesearch-street/articleshow/0.cms",
-    snippet: "Distribution layer for 40+ Indian streetwear and lifestyle labels.",
-  },
-  {
-    title: "Inside SoleSearch: building community before marketplace",
+    title: "Param Minhas on community-led commerce and the Series A reality",
     source: "Moneycontrol",
     url: "https://www.moneycontrol.com/news/business/startup/solesearch-sneakers-streetwear-india",
-    snippet: "Param Minhas on community-led commerce and the Series A reality.",
+    snippet: "Inside SoleSearch: building community before marketplace — and what happens after.",
   },
 ];

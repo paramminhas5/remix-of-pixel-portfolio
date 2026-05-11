@@ -20,6 +20,7 @@ const CHAPTER_ICON: Record<string, string> = {
   investopad: "▲",
   sole: "♔",
   ccd: "♪",
+  fere: "⬡",
   iterate: "◐",
 };
 
@@ -64,8 +65,8 @@ export function WorldMap({
               key={l.id}
               onClick={() => onWarp(l)}
               title={`${l.name} — ${l.blurb}`}
-              className="group relative flex shrink-0 flex-col items-center justify-center transition-transform hover:-translate-y-0.5"
-              style={{ width: 78 }}
+              style={{ minWidth: 84 }}
+              className="group relative flex shrink-0 flex-col items-center justify-center transition-transform hover:-translate-y-0.5 sm:min-w-[110px]"
             >
               {/* lantern flame above active */}
               {active && (
@@ -101,6 +102,12 @@ export function WorldMap({
                 <span className="absolute left-1 bottom-1 h-1 w-1 bg-[#1a0a02]" />
                 <span className="absolute right-1 bottom-1 h-1 w-1 bg-[#1a0a02]" />
 
+                {/* side-world badge */}
+                {l.isSideWorld && (
+                  <div className="absolute -left-1 bottom-0 translate-y-full pt-0.5">
+                    <span className="block rounded-sm bg-white/20 px-1 font-mono text-[5px] uppercase tracking-widest text-white/60">side</span>
+                  </div>
+                )}
                 {/* number stripe */}
                 <div
                   className="absolute left-0 right-0 top-0 h-[3px]"
@@ -160,7 +167,7 @@ export function WorldMap({
 
               {/* chapter name plank — always visible, full name */}
               <div
-                className="mt-1 w-full truncate px-0.5 text-center text-[7px] uppercase tracking-wider sm:text-[8px]"
+                className="mt-1 w-full px-0.5 text-center text-[7px] uppercase tracking-wider sm:text-[9px] leading-tight"
                 style={{ color: active ? l.palette.accent : "#fde2bf", textShadow: "1px 1px 0 #1a0a02" }}
               >
                 {l.name}

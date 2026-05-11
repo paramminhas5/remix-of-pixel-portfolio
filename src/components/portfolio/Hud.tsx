@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { LEVELS, type Level, CONTACT } from "./data";
 import type { Progress } from "./WorldMap";
 import type { Chapter } from "./worldStitch";
@@ -196,32 +197,32 @@ export function TitleScreen({
         </button>
 
         {/* Cliff-notes shortcut hint */}
-        <div className="mt-4 rounded-lg border border-white/10 bg-white/5 px-4 py-2 font-mono text-[10px] text-white/50 text-center">
-          Press <kbd className="rounded border border-white/20 bg-white/10 px-1 font-bold text-white/70">?</kbd> any time for a 30-second career overview
-        </div>
-
-        <div className="mt-5 flex items-center justify-center gap-1 font-mono text-[10px] uppercase tracking-widest text-white/55 sm:gap-3 sm:text-[11px]">
+        {/* Secondary action row */}
+        <div className="mt-5 flex items-center justify-center gap-2 flex-wrap">
+          {onResume && (
+            <button
+              onClick={onResume}
+              className="rounded-full border border-white/30 bg-white/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/80 hover:bg-white/15 transition"
+            >
+              📄 Résumé
+            </button>
+          )}
+          <button
+            onClick={() => {/* Cliff notes opened via keyboard ? — shown as hint */}}
+            className="rounded-full border border-white/20 bg-white/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:bg-white/15 transition"
+            title="Press ? in-game for the 30-second career overview"
+          >
+            ? Career overview
+          </button>
           <button
             onClick={() => onPick("quick")}
-            className="rounded px-2 py-1 hover:bg-white/10 hover:text-indigo-200"
+            className="rounded-full border border-white/20 bg-white/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:bg-white/15 transition"
           >
-            » Sim tour
+            ⚡ Sim tour
           </button>
-          <span className="text-white/20">·</span>
-          {onResume && (
-            <>
-              <button
-                onClick={onResume}
-                className="rounded px-2 py-1 hover:bg-white/10 hover:text-amber-200"
-              >
-                📄 Resume
-              </button>
-              <span className="text-white/20">·</span>
-            </>
-          )}
           <a
             href="mailto:param@catscandance.com"
-            className="rounded px-2 py-1 hover:bg-white/10 hover:text-white"
+            className="rounded-full border border-white/20 bg-white/5 px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest text-white/60 hover:bg-white/15 transition"
           >
             ✉ Contact
           </a>
@@ -410,20 +411,11 @@ export function Inventory({
           )}
         </Section>
 
-        <Section title="Quotes you heard" accent="#ff8c6b">
+        <Section title="People you met" accent="#ff8c6b">
           {collectedQuotes.length === 0 ? (
-            <Empty text="Talk to NPCs by walking up + pressing E." />
+            <Empty text="Walk up to characters and press E to meet them." />
           ) : (
-            <div className="space-y-2">
-              {collectedQuotes.map((q, i) => {
-                const lv = LEVELS.find((l) => l.id === q.levelId)!;
-                return (
-                  <div key={i} className="rounded border-l-2 pl-3 text-sm text-white/85" style={{ borderColor: lv.palette.accent }}>
-                    "{q.quote}" — <span className="font-mono text-[11px] text-white/60">{q.name}</span>
-                  </div>
-                );
-              })}
-            </div>
+            <PeopleCards quotes={collectedQuotes} />
           )}
         </Section>
 
@@ -454,6 +446,60 @@ export function Inventory({
           </div>
         </Section>
       </div>
+    </div>
+  );
+}
+
+const PORTRAIT_EMOJI: Record<string, string> = {
+  founder: "🧑‍💻", investor: "📈", tenant: "🏠", engineer: "⚙️",
+  celeb: "⭐", client: "🤝", fan: "🎮",
+};
+
+function PeopleCards({ quotes }: { quotes: { levelId: string; name: string; quote: string }[] }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  return (
+    <div className="space-y-2">
+      {quotes.map((q, i) => {
+        const lv = LEVELS.find((l) => l.id === q.levelId)!;
+        // Find the full NPC data for portrait
+        const npcData = lv?.npcs.find((n) => n.name === q.name);
+        const emoji = PORTRAIT_EMOJI[npcData?.portrait ?? "founder"] ?? "🧑‍💻";
+        const isOpen = openIdx === i;
+        return (
+          <div
+            key={i}
+            className="rounded-lg border overflow-hidden transition-all"
+            style={{ borderColor: isOpen ? lv.palette.accent : `${lv.palette.accent}50` }}
+          >
+            <button
+              className="w-full flex items-center gap-3 p-3 text-left hover:bg-white/5 transition"
+              onClick={() => setOpenIdx(isOpen ? null : i)}
+            >
+              <div
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-lg"
+                style={{ borderColor: lv.palette.accent, background: `${lv.palette.accent}15` }}
+              >
+                {emoji}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-bold text-white leading-tight">{q.name}</div>
+                <div className="font-mono text-[10px] text-white/50" style={{ color: lv.palette.accentDim }}>
+                  {npcData?.role ?? lv.era}
+                </div>
+              </div>
+              <span className="shrink-0 font-mono text-[10px] text-white/30 transition-transform" style={{ transform: isOpen ? "rotate(90deg)" : "none" }}>▶</span>
+            </button>
+            {isOpen && (
+              <div
+                className="border-t px-4 py-3 text-sm leading-relaxed text-white/80 italic"
+                style={{ borderColor: `${lv.palette.accent}40` }}
+              >
+                "{q.quote}"
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

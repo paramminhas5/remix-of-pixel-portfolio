@@ -52,6 +52,7 @@ export type Level = {
   secret: Secret;
   minigame: MinigameTrigger;
   cumulativeSkillsAtClear: string[];
+  isSideWorld?: boolean;
 };
 
 export const TILE = 28;
@@ -130,7 +131,7 @@ const HOME: Level = {
   map: buildMap({ width: 36, spawn: 2, npcGxs: [6], qBlock: 14, minigame: 28, secret: 22,
     coinTopGxs: [6, 19], coinMidGxs: [], platforms: [[4, 4], [19, 4]], flagAt: 34 }),
   spawn: { gx: 2, gy: 9 },
-  coins: [{ gx: 6, gy: 3, skill: "Curiosity" }, { gx: 19, gy: 3, skill: "Restlessness" }],
+  coins: [{ gx: 6, gy: 3, skill: "Curiosity" }, { gx: 19, gy: 3, skill: "Self-direction" }],
   npcs: [{
     gx: 6, gy: 9, name: "Welcome", role: "Bedroom · The Prologue", portrait: "founder", hue: 220, beat: "did",
     quote: "This is a portfolio you walk through. 15 years of building, told as a side-scroller.\n\nMove right with ← →. Press space to jump. Each chapter is a real company I built.",
@@ -164,7 +165,7 @@ const ORIGIN: Level = {
   coins: [
     { gx: 8, gy: 3, skill: "Vision" }, { gx: 22, gy: 3, skill: "Storytelling" },
     { gx: 36, gy: 3, skill: "Taste" }, { gx: 46, gy: 3, skill: "Hustle" },
-    { gx: 14, gy: 7, skill: "First-principles" }, { gx: 28, gy: 7, skill: "Curiosity" },
+    { gx: 14, gy: 7, skill: "Systems thinking" }, { gx: 28, gy: 7, skill: "Curiosity" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "Param Minhas", role: "Builder · Designer · Director", portrait: "founder", hue: 280, beat: "did",
@@ -201,8 +202,8 @@ const GRP: Level = {
     coinTopGxs: [9, 20, 32], coinMidGxs: [14, 26], platforms: [[7, 4], [20, 4], [32, 4]] }),
   coins: [
     { gx: 9, gy: 3, skill: "Product 0→1" }, { gx: 20, gy: 3, skill: "Web scraping" },
-    { gx: 32, gy: 3, skill: "Scrappy execution" }, { gx: 14, gy: 7, skill: "Early growth" },
-    { gx: 26, gy: 7, skill: "Founding-team" }, { gx: 42, gy: 3, skill: "Resilience" },
+    { gx: 32, gy: 3, skill: "Lean execution" }, { gx: 14, gy: 7, skill: "Early growth" },
+    { gx: 26, gy: 7, skill: "Co-founding" }, { gx: 42, gy: 3, skill: "Resilience" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "GetRightPrice", role: "Founding team · 2010", portrait: "founder", hue: 100, beat: "did",
@@ -240,7 +241,7 @@ const HAB: Level = {
   coins: [
     { gx: 9, gy: 3, skill: "Operations" }, { gx: 20, gy: 3, skill: "Unit economics" },
     { gx: 32, gy: 3, skill: "Sales" }, { gx: 14, gy: 7, skill: "Bootstrapping" },
-    { gx: 26, gy: 7, skill: "Hospitality" }, { gx: 42, gy: 3, skill: "P&L" },
+    { gx: 26, gy: 7, skill: "Hospitality" }, { gx: 42, gy: 3, skill: "P&L management" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "Hab Housing", role: "Founder · 2012", portrait: "founder", hue: 25, beat: "did",
@@ -260,8 +261,8 @@ const HAB: Level = {
 const AI: Level = {
   id: "ai", index: 4, name: "AI Era",
   era: "2013-17 · Octo → Quartic.ai",
-  blurb: "India's first chatbot. Founding team Octo. Director of Marketing at Quartic.ai.",
-  story: "CHATBOT (2013) → OCTO → QUARTIC.AI.\nFounding team of one of India's earliest AI products. Acquired.",
+  blurb: "Built India's first AI chatbot (2013). Co-built Octo — an AI marketing platform. Acquired by Quartic.ai.",
+  story: "2013: Built one of India's first AI chatbots.\nOCTO: Built the AI marketing platform on top of it with Akshaya Aron.\nQUARTIC.AI: Octo was acquired. Led marketing as Director.",
   palette: {
     sky: "#3d4a78", skyMid: "#4f5a92", skyLow: "#2a3358",
     ground: "#101a30", groundTop: "#2a3a5a",
@@ -270,24 +271,26 @@ const AI: Level = {
     pipe: "#3a6280", pipeShade: "#1f3548",
   },
   parallax: ["racks", "stars"],
-  metrics: { role: "Founding team Octo · Director Marketing Quartic.ai", years: "2013-17",
-    outcome: "One of India's first chatbot products. Acquired by Quartic.ai.",
-    bullets: ["Conversational AI in 2013, before the category existed", "Founding team of Octo, acquired by Quartic.ai", "Director of Marketing at Quartic.ai post-acquisition"] },
-  map: buildMap({ width: 45, spawn: 2, npcGxs: [5, 28], qBlock: 16, minigame: 34, secret: 40,
-    coinTopGxs: [9, 20, 32], coinMidGxs: [14, 26], platforms: [[7, 4], [20, 4], [32, 4]] }),
+  metrics: { role: "Founding team Octo · Director of Marketing, Quartic.ai", years: "2013-17",
+    outcome: "Built India's first AI chatbot. Co-built Octo (AI marketing platform). Acquired by Quartic.ai.",
+    bullets: ["Built one of India's first AI chatbots in 2013, before the category existed", "Co-built Octo — an AI marketing platform — with Akshaya Aron", "Octo acquired by Quartic.ai; led post-acquisition marketing as Director"] },
+  map: buildMap({ width: 45, spawn: 2, npcGxs: [5, 20, 32], qBlock: 16, minigame: 34, secret: 40,
+    coinTopGxs: [9, 24, 36], coinMidGxs: [14, 28], platforms: [[7, 4], [22, 4], [34, 4]] }),
   coins: [
-    { gx: 9, gy: 3, skill: "Conversational AI" }, { gx: 20, gy: 3, skill: "MarTech" },
-    { gx: 32, gy: 3, skill: "Enterprise AI" }, { gx: 14, gy: 7, skill: "Director-level marketing" },
-    { gx: 26, gy: 7, skill: "M&A integration" }, { gx: 42, gy: 3, skill: "Pioneer mindset" },
+    { gx: 9, gy: 3, skill: "Conversational AI" }, { gx: 24, gy: 3, skill: "Marketing platforms" },
+    { gx: 36, gy: 3, skill: "Enterprise AI" }, { gx: 14, gy: 7, skill: "B2B marketing" },
+    { gx: 28, gy: 7, skill: "Post-acquisition growth" }, { gx: 42, gy: 3, skill: "Early market entry" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "Octo → Quartic.ai", role: "Founding team · 2013", portrait: "engineer", hue: 195, beat: "did",
-      quote: "Founding team of one of India's first chatbot products in 2013, then founding team of Octo — a marketing platform built on it.\n\nOcto was acquired by Quartic.ai. I led marketing as Director post-acquisition." },
-    { gx: 28, gy: 9, name: "What AI taught me", role: "Product marketing, the hard way", portrait: "investor", hue: 200, beat: "learned",
+      quote: "In 2013 we built one of India's first AI chatbots — before the word was common.\n\nOn top of that, we built Octo: an AI marketing platform. Octo was acquired by Quartic.ai. I led marketing there as Director." },
+    { gx: 20, gy: 9, name: "Akshaya Aron", role: "Co-founder, Octo · CEO, Quartic.ai", portrait: "founder", hue: 185, beat: "did",
+      quote: "Akshaya and I built Octo together — a chatbot that became an AI marketing platform.\n\nWhen Quartic.ai acquired us, I stayed on as Director of Marketing. A decade later, we're working together again at Fere.ai." },
+    { gx: 32, gy: 9, name: "What AI taught me", role: "Product marketing, the hard way", portrait: "investor", hue: 200, beat: "learned",
       quote: "Translating deeply technical products into things people understand.\n\nClosing the gap between what engineers ship and what users see." },
   ],
-  clipping: { gx: 16, gy: 9, title: "Conversational AI, in 2013", source: "Octo → Quartic.ai",
-    body: "Pitching 'conversational AI' in 2013 got blank stares. Now it's on slide 2 of every deck.\n\nBeing early is the same as being wrong, until it isn't." },
+  clipping: { gx: 16, gy: 9, title: "Building AI before it was a category", source: "Octo → Quartic.ai · 2013-17",
+    body: "In 2013 we built a chatbot. Then Octo — an AI marketing platform. Then Quartic acquired us.\n\nPitching 'conversational AI' got blank stares. Now it's on slide 2 of every deck. Being early is the same as being wrong, until it isn't." },
   secret: { gx: 40, gy: 9, title: "Before it was cool",
     body: "Built on early NLP stacks, sold into enterprise marketing. Acquired into industrial AI." },
   minigame: { gx: 34, gy: 9, id: "chat-match", label: "Mini-game: match the chatbot reply" },
@@ -320,9 +323,9 @@ const INVESTOPAD: Level = {
   map: buildMap({ width: 50, spawn: 2, npcGxs: [5, 22, 38], qBlock: 16, minigame: 32, secret: 44,
     coinTopGxs: [10, 20, 30, 42], coinMidGxs: [14, 26, 36], platforms: [[8, 4], [22, 4], [36, 4]] }),
   coins: [
-    { gx: 10, gy: 3, skill: "Venture strategy" }, { gx: 20, gy: 3, skill: "Capital allocation" },
-    { gx: 30, gy: 3, skill: "Growth partnerships" }, { gx: 42, gy: 3, skill: "Deal sense" },
-    { gx: 14, gy: 7, skill: "Portfolio support" }, { gx: 26, gy: 7, skill: "Network" },
+    { gx: 10, gy: 3, skill: "Venture strategy" }, { gx: 20, gy: 3, skill: "Capital strategy" },
+    { gx: 30, gy: 3, skill: "Partnership development" }, { gx: 42, gy: 3, skill: "Deal evaluation" },
+    { gx: 14, gy: 7, skill: "Portfolio support" }, { gx: 26, gy: 7, skill: "Relationship building" },
     { gx: 36, gy: 7, skill: "Founder coaching" },
   ],
   npcs: [
@@ -374,14 +377,14 @@ const SOLE: Level = {
     platforms: [[7, 5], [20, 5], [34, 5], [48, 5], [60, 5]],
   }),
   coins: [
-    { gx: 9, gy: 3, skill: "CEO" }, { gx: 16, gy: 3, skill: "Fundraising · $795K" },
+    { gx: 9, gy: 3, skill: "CEO" }, { gx: 16, gy: 3, skill: "Fundraising" },
     { gx: 24, gy: 3, skill: "Brand building" }, { gx: 30, gy: 3, skill: "Retail ops" },
-    { gx: 38, gy: 3, skill: "PR & Press" }, { gx: 46, gy: 3, skill: "Community · 350K" },
-    { gx: 54, gy: 3, skill: "Live events · 30+" }, { gx: 64, gy: 3, skill: "Sponsorships · ₹1cr+" },
-    { gx: 14, gy: 7, skill: "Storytelling at scale" }, { gx: 22, gy: 7, skill: "Influencer ops" },
+    { gx: 38, gy: 3, skill: "PR & Press" }, { gx: 46, gy: 3, skill: "Community building" },
+    { gx: 54, gy: 3, skill: "Event production" }, { gx: 64, gy: 3, skill: "Brand sponsorships" },
+    { gx: 14, gy: 7, skill: "Growth storytelling" }, { gx: 22, gy: 7, skill: "Influencer marketing" },
     { gx: 28, gy: 7, skill: "Capital strategy" }, { gx: 36, gy: 7, skill: "DTC commerce" },
-    { gx: 44, gy: 7, skill: "Brand × culture" }, { gx: 52, gy: 7, skill: "Marketplace ops" },
-    { gx: 60, gy: 7, skill: "Series A learnings" }, { gx: 66, gy: 7, skill: "Beautiful exits" },
+    { gx: 44, gy: 7, skill: "Culture marketing" }, { gx: 52, gy: 7, skill: "Marketplace operations" },
+    { gx: 60, gy: 7, skill: "Startup scaling" }, { gx: 66, gy: 7, skill: "Strategic exits" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "SoleSearch", role: "Co-founder & CEO · 2020-24", portrait: "celeb", hue: 330, beat: "did",
@@ -392,6 +395,8 @@ const SOLE: Level = {
       quote: "Ran 30+ live events across India. ₹1cr+ in event sales, ₹1cr+ in sponsorships.\n\nBrand partners: Royal Enfield, boAt, Budweiser, plus 40+ homegrown labels." },
     { gx: 48, gy: 9, name: "SoleSearch Street", role: "Marketplace for India's homegrown brands", portrait: "client", hue: 350, beat: "did",
       quote: "Built SoleSearch Street — a marketplace for Indian homegrown streetwear and lifestyle brands.\n\nGave 40+ small Indian labels their first real distribution." },
+    { gx: 55, gy: 9, name: "Business of Fashion", role: "Press · Global fashion media", portrait: "client", hue: 345, beat: "did",
+      quote: "One likely contender [in India's streetwear scene] is Param Minhas, co-founder of SoleSearch.\n\nSoleSearch achieved ₹30-35 crore in sales in the last fiscal year. — Business of Fashion, 2024" },
     { gx: 62, gy: 9, name: "Rannvijay Singha", role: "Partner · Brand & culture", portrait: "celeb", hue: 0, beat: "did",
       quote: "Joined SoleSearch as a partner — reach, brand, and the streetwear credibility India needed.\n\nLive events, curated drops, the face of the movement." },
   ],
@@ -406,7 +411,8 @@ const SOLE: Level = {
 // ─── CATS CAN DANCE (70w · music label + pet culture ONLY) ────
 const CCD: Level = {
   id: "ccd", index: 7, name: "Cats Can Dance",
-  era: "Now · Music Label + Pet Culture",
+  era: "Ongoing · Music Label + Pet Culture",
+  isSideWorld: true,
   blurb: "India's first cat-forward music label & pet culture brand.",
   story: "CATS CAN DANCE — a music label and pet culture brand.\nWhere creativity lives without a brief — music, play, and a soft spot for cats.",
   palette: {
@@ -445,12 +451,62 @@ const CCD: Level = {
   cumulativeSkillsAtClear: ["Vision", "Operations", "Bootstrapping", "Conversational AI", "Director-level marketing", "Venture strategy", "CEO", "Fundraising · $795K", "Brand building"],
 };
 
-// ─── ITERATE (70w · AI-led marketing agency · NEW chapter) ────
+
+// ─── FERE.AI (50w · AI × Crypto side-world, post-CCD) ─────────────────────
+const FERE: Level = {
+  id: "fere", index: 8, name: "Fere.ai",
+  era: "2024-25 · AI × Crypto",
+  blurb: "Year-long project with Akshaya Aron. Autonomous AI agents for financial markets.",
+  story: "FERE.AI — reunited with Akshaya Aron (Octo → Quartic.ai → now Fere.ai).\nA year building AI-powered autonomous trading agents. $1.3M raised.",
+  isSideWorld: true,
+  palette: {
+    sky: "#050d1a", skyMid: "#0a1f2e", skyLow: "#051014",
+    ground: "#020810", groundTop: "#0a1a28",
+    brick: "#1a8c6e", brickShade: "#0a4a3c",
+    accent: "#00e8a0", accentDim: "#00b87a",
+    pipe: "#106e54", pipeShade: "#053d2c",
+  },
+  parallax: ["racks", "stars"],
+  metrics: { role: "Growth & Marketing Partner · Fere.ai", years: "2024-25",
+    outcome: "Year-long project. AI autonomous agents for crypto markets. $1.3M raised.",
+    bullets: [
+      "Rejoined Akshaya Aron a decade after Octo/Quartic.ai",
+      "Built growth and marketing strategy for Fere.ai — autonomous AI trading agents",
+      "Fere.ai raised $1.3M led by Ethereal Ventures, Galaxy Vision Hill, Kosmos Ventures",
+      "10M+ autonomous agent actions processed on platform launch",
+      "Operated across Ethereum, Solana, Base, Arbitrum, BNB Chain, Polymarket",
+    ] },
+  map: buildMap({ width: 50, spawn: 2, npcGxs: [5, 22, 38], qBlock: 16, minigame: 32, secret: 44,
+    coinTopGxs: [10, 20, 30, 42], coinMidGxs: [14, 26, 36],
+    platforms: [[8, 5], [22, 5], [36, 5]] }),
+  coins: [
+    { gx: 10, gy: 3, skill: "AI agents" }, { gx: 20, gy: 3, skill: "Crypto marketing" },
+    { gx: 30, gy: 3, skill: "DeFi growth" }, { gx: 42, gy: 3, skill: "Web3 narrative" },
+    { gx: 14, gy: 7, skill: "Autonomous systems" }, { gx: 26, gy: 7, skill: "Fintech GTM" },
+    { gx: 36, gy: 7, skill: "Token community" },
+  ],
+  npcs: [
+    { gx: 5, gy: 9, name: "Fere.ai", role: "AI × Crypto · 2024-25", portrait: "engineer", hue: 160, beat: "did",
+      quote: "A year-long project with Akshaya Aron — a decade after Octo and Quartic.ai.\n\nFere builds autonomous AI agents for financial markets. Starting with crypto. Growing into everything." },
+    { gx: 22, gy: 9, name: "Akshaya Aron", role: "Co-founder & CEO, Fere.ai", portrait: "founder", hue: 165, beat: "did",
+      quote: "Co-founders Aron and Prakash have been building AI together since 2014. Over eleven years, three ventures, and successful exits. — GlobeNewswire, 2026.\n\nFere raised $1.3M from Ethereal Ventures, Galaxy Vision Hill & Kosmos Ventures." },
+    { gx: 38, gy: 9, name: "What Fere taught me", role: "AI agents at the frontier", portrait: "investor", hue: 170, beat: "learned",
+      quote: "When AI agents can act autonomously — research, wait, execute, learn — the marketing problem changes completely.\n\nYou're not selling a product. You're building trust in something people can't fully see." },
+  ],
+  clipping: { gx: 16, gy: 9, title: "Fere.ai raises $1.3M for autonomous AI trading agents", source: "GlobeNewswire · April 2026",
+    body: "Fere is building the platform where autonomous AI agents manage your financial life. 10M+ autonomous agent actions processed.\n\nLed by Ethereal Ventures with Galaxy Vision Hill and Kosmos Ventures." },
+  secret: { gx: 44, gy: 9, title: "Full circle",
+    body: "Akshaya and I first built AI together in 2013. Twelve years later, the technology finally caught up to the vision." },
+  minigame: { gx: 32, gy: 9, id: "chat-match", label: "Mini-game: pick the better AI prompt" },
+  cumulativeSkillsAtClear: ["Vision", "Operations", "Bootstrapping", "Conversational AI", "B2B marketing", "Capital strategy", "CEO", "Fundraising", "Brand building", "Music production"],
+};
+
+// ─── ITERATE (70w · destination · final chapter) ─────────────
 const ITERATE: Level = {
-  id: "iterate", index: 8, name: "Iterate",
-  era: "Now · AI-led Marketing Agency",
-  blurb: "AI-native marketing agency. 15 years of building, pointed at one target.",
-  story: "ITERATE — an AI-led marketing agency.\nThe convergence of 15 years of building, brand, technology, and culture, moving at the speed of AI.",
+  id: "iterate", index: 9, name: "Iterate",
+  era: "Now · AI-native Marketing Agency",
+  blurb: "The destination. 15 years of building, brand, technology, and culture — pointed at one target.",
+  story: "ITERATE — the convergence of everything.\n15 years of operator instinct. Pointed at marketing. Moving at the speed of AI.",
   palette: {
     sky: "#0b1830", skyMid: "#173255", skyLow: "#0a1428",
     ground: "#06101e", groundTop: "#1a2c4e",
@@ -462,32 +518,37 @@ const ITERATE: Level = {
   metrics: { role: "Founder · Iterate", years: "Now",
     outcome: "AI-native marketing agency. Speed × strategy × creativity.",
     bullets: ["AI workflows for brand & growth", "Strategy + creative + tech in one room", "Built on 15 years of operator instinct"] },
-  map: buildMap({ width: 50, spawn: 2, npcGxs: [5, 22, 38], qBlock: 16, minigame: 32, secret: 44,
-    coinTopGxs: [10, 20, 30, 42], coinMidGxs: [14, 26, 36],
-    platforms: [[8, 5], [22, 5], [36, 5]] }),
+  map: buildMap({ width: 70, spawn: 2, npcGxs: [5, 20, 36, 52, 62], qBlock: 14, minigame: 44, secret: 58,
+    coinTopGxs: [9, 16, 24, 32, 40, 48, 56, 64],
+    coinMidGxs: [13, 22, 30, 38, 46, 54, 60, 66],
+    platforms: [[7, 5], [20, 5], [34, 5], [48, 5], [60, 5]], flagAt: 68 }),
   coins: [
-    { gx: 10, gy: 3, skill: "AI-led marketing" }, { gx: 20, gy: 3, skill: "Brand systems" },
+    { gx: 9, gy: 3, skill: "AI-powered marketing" }, { gx: 20, gy: 3, skill: "Brand systems" },
     { gx: 30, gy: 3, skill: "Growth engineering" }, { gx: 42, gy: 3, skill: "Founder coaching" },
     { gx: 14, gy: 7, skill: "Prompt strategy" }, { gx: 26, gy: 7, skill: "Taste-as-strategy" },
     { gx: 36, gy: 7, skill: "Speed × craft" },
   ],
   npcs: [
-    { gx: 5, gy: 9, name: "Iterate", role: "Founder · AI-led marketing agency", portrait: "engineer", hue: 200, beat: "did",
-      quote: "An AI-led marketing agency built on 15 years of operating across brand, technology, and growth.\n\nStrategy, creative, and technology in one room — moving at the speed of AI." },
-    { gx: 22, gy: 9, name: "How we work", role: "Strategy + creative + tech", portrait: "client", hue: 210, beat: "did",
+    { gx: 5, gy: 9, name: "Iterate", role: "Founder · AI-native marketing agency", portrait: "engineer", hue: 200, beat: "did",
+      quote: "An AI-native marketing agency built on 15 years of operating across brand, technology, and growth.\n\nStrategy, creative, and technology in one room — moving at the speed of AI." },
+    { gx: 20, gy: 9, name: "How Iterate works", role: "Strategy + creative + tech", portrait: "client", hue: 210, beat: "did",
       quote: "AI workflows where they make the work better, not cheaper.\n\nFor founders who want a partner, not a vendor." },
-    { gx: 38, gy: 9, name: "What AI doesn't replace", role: "Why taste still wins", portrait: "fan", hue: 195, beat: "learned",
-      quote: "AI amplifies people who already know what they're doing.\n\nEvery year of experience becomes a prompt." },
+    { gx: 36, gy: 9, name: "The operator edge", role: "15 years of instinct as infrastructure", portrait: "investor", hue: 220, beat: "did",
+      quote: "Every company I built compounds into the next.\n\nIterate is the first time I've been able to deploy the full stack at once — brand, growth, technology, taste." },
+    { gx: 52, gy: 9, name: "What AI doesn't replace", role: "Why taste still wins", portrait: "fan", hue: 195, beat: "learned",
+      quote: "AI amplifies people who already know what they're doing.\n\nEvery year of experience becomes a prompt. Every mistake becomes a guardrail." },
+    { gx: 62, gy: 9, name: "Working with us", role: "Small number of founder partners", portrait: "founder", hue: 205, beat: "did",
+      quote: "We take a small number of founder partners per quarter.\n\nIf you want a marketing agency that thinks like an operator — reach out." },
   ],
-  clipping: { gx: 16, gy: 9, title: "AI-native, now", source: "Iterate · Now",
+  clipping: { gx: 14, gy: 9, title: "AI-native, now", source: "Iterate · Now",
     body: "What happens when an operator who has lived through ecommerce, housing, AI, VC, sneakers, and music points everything at one target.\n\nMarketing that compounds." },
   secret: { gx: 44, gy: 9, title: "Working with us",
     body: "Small number of founder partners per quarter." },
   minigame: { gx: 32, gy: 9, id: "chat-match", label: "Mini-game: pick the better prompt" },
-  cumulativeSkillsAtClear: ["Vision", "Operations", "Bootstrapping", "Conversational AI", "Director-level marketing", "Venture strategy", "CEO", "Fundraising · $795K", "Brand building", "Music production"],
+  cumulativeSkillsAtClear: ["Vision", "Operations", "Bootstrapping", "Conversational AI", "B2B marketing", "Capital strategy", "CEO", "Fundraising", "Brand building", "Music production", "AI-powered marketing"],
 };
 
-export const LEVELS: Level[] = [HOME, ORIGIN, GRP, HAB, AI, INVESTOPAD, SOLE, CCD, ITERATE];
+export const LEVELS: Level[] = [HOME, ORIGIN, GRP, HAB, AI, INVESTOPAD, SOLE, CCD, FERE, ITERATE];
 
 export const CONTACT = {
   email: "param@catscandance.com",

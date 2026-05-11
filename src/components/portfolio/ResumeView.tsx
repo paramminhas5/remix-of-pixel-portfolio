@@ -1,4 +1,5 @@
 import { LEVELS, CONTACT, PRESS } from "./data";
+import paramPhoto from "../../assets/param-minhas.png";
 
 // Skills grouped by domain
 const SKILL_GROUPS: { label: string; skills: string[] }[] = [
@@ -12,7 +13,7 @@ const SKILL_GROUPS: { label: string; skills: string[] }[] = [
   },
   {
     label: "Engineering & AI",
-    skills: ["Full-stack", "Conversational AI", "LLM tooling", "Prompt engineering", "Data pipelines", "Web scraping", "Rapid prototyping"],
+    skills: ["Full-stack", "Conversational AI", "LLM tooling", "AI prompting", "Data pipelines", "Web scraping", "Rapid prototyping"],
   },
   {
     label: "Music & Performance",
@@ -20,7 +21,7 @@ const SKILL_GROUPS: { label: string; skills: string[] }[] = [
   },
   {
     label: "Growth & Marketing",
-    skills: ["Community", "Content", "Distribution", "Sneaker culture", "Press / PR", "Partnerships"],
+    skills: ["Community building", "Content", "Distribution", "AI-powered marketing", "Growth storytelling", "Brand sponsorships", "Influencer marketing", "Partnerships"],
   },
 ];
 
@@ -39,7 +40,7 @@ const COMPANIES = [
   "Meesho", "Entri", "Simsim", "Amazon", "Forbes",
   "Royal Enfield", "boAt", "Budweiser",
   "CNBC-TV18", "YourStory", "Inc42", "Economic Times",
-  "Quartic.ai", "Investopad", "SoleSearch",
+  "Quartic.ai", "Fere.ai", "Investopad", "SoleSearch",
 ];
 
 export function ResumeView({ onBackToGame }: { onBackToGame?: () => void }) {
@@ -86,12 +87,13 @@ export function ResumeView({ onBackToGame }: { onBackToGame?: () => void }) {
         {/* HERO */}
         <header className="mb-10 border-b border-black/10 pb-8">
           <div className="flex items-start gap-6">
-            {/* Profile avatar */}
-            <div
-              className="resume-no-print hidden shrink-0 sm:flex h-20 w-20 items-center justify-center rounded-full border-2 border-black/15 bg-gradient-to-br from-indigo-100 to-purple-100"
-              aria-label="Param Minhas"
-            >
-              <span className="resume-serif text-2xl font-bold text-[#3a2c6a] select-none">PM</span>
+            {/* Profile photo */}
+            <div className="resume-no-print hidden shrink-0 sm:block">
+              <img
+                src={paramPhoto}
+                alt="Param Minhas"
+                className="h-24 w-24 rounded-full border-2 border-black/15 object-cover object-top"
+              />
             </div>
             <div className="flex-1">
               <div className="resume-mono text-[10px] uppercase tracking-[0.3em] text-black/50">

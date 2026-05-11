@@ -1,14 +1,42 @@
 import { LEVELS } from "./data";
 
 const ICONS: Record<string, string> = {
-  Vision: "🌅", Storytelling: "📜", Taste: "✨", "First-principles": "🧭", Curiosity: "🔭", Hustle: "🔥",
-  "Product 0→1": "🛠", "Web scraping": "🕸", "Scrappy execution": "⚡", "Early growth": "📈", "Founding-team": "👥", Resilience: "🛡",
-  Operations: "⚙", "Unit economics": "💸", Sales: "🤝", Bootstrapping: "🥾", Hospitality: "🏠", "P&L": "📊",
-  "Conversational AI": "💬", MarTech: "📡", "Enterprise AI": "🤖", "Director-level marketing": "🎯", "M&A integration": "🔗", "Pioneer mindset": "🚀",
-  "Venture strategy": "🧠", "Capital allocation": "🏦", "Growth partnerships": "🌐", "Portfolio support": "💼", Network: "🕸", "Deal sense": "🎲",
-  CEO: "👑", "Fundraising · $795K": "💰", "Brand building": "🏷", "Retail ops": "🏬", "PR & Press": "📰", Community: "🫂",
-  "Creative direction": "🎨", "AI-led marketing": "🪄", "Music production": "🎵", "Brand systems": "🧩", "Founder coaching": "🧗", "Taste-as-strategy": "🎭",
-  Restlessness: "🔄",
+  // Core traits
+  Vision: "🌅", Storytelling: "📜", Taste: "✨", Curiosity: "🔭", Hustle: "🔥",
+  "Self-direction": "🧭", "Systems thinking": "🧠", Resilience: "🛡",
+  // Product & Engineering
+  "Product 0→1": "🛠", "Web scraping": "🕸", "Lean execution": "⚡",
+  "Early growth": "📈", "Co-founding": "👥", "Rapid prototyping": "🔧",
+  // Ops & Business
+  Operations: "⚙", "Unit economics": "💸", Sales: "🤝", Bootstrapping: "🥾",
+  Hospitality: "🏠", "P&L management": "📊",
+  // AI & Tech
+  "Conversational AI": "💬", "Marketing platforms": "📡", "Enterprise AI": "🤖",
+  "B2B marketing": "🎯", "Post-acquisition growth": "🔗", "Early market entry": "🚀",
+  "AI-powered marketing": "🪄", "AI prompting": "🤖", "AI agents": "🤖",
+  // Finance & Ventures
+  "Venture strategy": "🏦", "Capital strategy": "🏦", "Partnership development": "🌐",
+  "Portfolio support": "💼", "Relationship building": "🕸", "Deal evaluation": "🎲",
+  "Founder coaching": "🧗",
+  // Brand & Marketing
+  CEO: "👑", Fundraising: "💰", "Brand building": "🏷", "Retail ops": "🏬",
+  "PR & Press": "📰", "Community building": "🫂", "Event production": "🎪",
+  "Brand sponsorships": "🤝", "Growth storytelling": "📣",
+  "Influencer marketing": "📸", "Culture marketing": "🎭",
+  "Startup scaling": "📈", "Strategic exits": "🚪", "Marketplace operations": "🏪",
+  // Design & Creative
+  "Creative direction": "🎨", "Design thinking": "🎨", "Brand systems": "🧩",
+  "Brand voice": "🎙", "Creative strategy": "🎭",
+  // Music
+  "Music production": "🎵", "Music A&R": "🎼", "Brand IP creation": "💡",
+  "Live events": "🎪",
+  // Crypto & Web3
+  "Crypto marketing": "₿", "DeFi growth": "📊", "Web3 narrative": "🌐",
+  "Autonomous systems": "🤖", "Fintech GTM": "💳", "Token community": "🪙",
+  // Iterate
+  "Growth strategy": "📈", "Rapid iteration": "⚡", "Operator instinct": "🧭",
+  "Content systems": "📋", "Campaign strategy": "🎯", "Performance marketing": "📊",
+  "Agency ops": "🏢", "Client partnerships": "🤝", "Speed × quality": "⚡",
 };
 
 export function SkillTree({
