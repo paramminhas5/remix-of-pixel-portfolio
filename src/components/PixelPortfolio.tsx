@@ -17,6 +17,7 @@ import { ChapterFlash } from "./portfolio/ChapterFlash";
 import { CliffNotes } from "./portfolio/CliffNotes";
 import { SkillTree, getSkillIcon } from "./portfolio/SkillTree";
 import { ResumeView } from "./portfolio/ResumeView";
+import { PressWall } from "./portfolio/PressWall";
 import { QuickBanner, type Banner } from "./portfolio/QuickBanner";
 import { setMuted as setAudioMuted, sfx } from "./portfolio/audio";
 import { setEngineMode } from "./portfolio/engine";
@@ -89,6 +90,7 @@ export default function PixelPortfolio() {
   const [secretOpen, setSecretOpen] = useState<Level | null>(null);
   const [minigameOpen, setMinigameOpen] = useState<Level | null>(null);
   const [invOpen, setInvOpen] = useState(false);
+  const [pressOpen, setPressOpen] = useState(false);
   const [muted, setMuted] = useState(true);
   useEffect(() => setAudioMuted(muted), [muted]);
 
@@ -96,7 +98,7 @@ export default function PixelPortfolio() {
 
   const handleRef = useRef<LevelHandle | null>(null);
 
-  const overlayOpen = !!(npcOpen || clipOpen || secretOpen || minigameOpen || invOpen || cliffOpen);
+  const overlayOpen = !!(npcOpen || clipOpen || secretOpen || minigameOpen || invOpen || cliffOpen || pressOpen);
   useEffect(() => {
     handleRef.current?.pauseInputs(overlayOpen);
   }, [overlayOpen]);
@@ -112,6 +114,8 @@ export default function PixelPortfolio() {
         setCliffOpen((v) => !v);
       } else if (e.key === "k" || e.key === "K") {
         setSkillTreeOpen((v) => !v);
+      } else if ((e.key === "p" || e.key === "P") && activeChapter?.levelId === "sole") {
+        setPressOpen((v) => !v);
       } else if (e.key === "Escape") {
         setNpcOpen(null);
         setClipOpen(null);
@@ -120,11 +124,12 @@ export default function PixelPortfolio() {
         setInvOpen(false);
         setCliffOpen(false);
         setSkillTreeOpen(false);
+        setPressOpen(false);
       }
     };
     window.addEventListener("keydown", k);
     return () => window.removeEventListener("keydown", k);
-  }, []);
+  }, [activeChapter?.levelId]);
 
   // Detect 100% completion → unlock Hard mode permanently.
   useEffect(() => {
@@ -297,6 +302,17 @@ export default function PixelPortfolio() {
           </button>
         </div>
 
+        {/* SoleSearch press wall trigger — only visible on the SoleSearch chapter */}
+        {activeChapter?.levelId === "sole" && (
+          <button
+            onClick={() => setPressOpen(true)}
+            className="pointer-events-auto absolute left-2 top-2 z-10 rounded-md border-2 border-[#ff006e] bg-black/70 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#ff9fd4] shadow-lg backdrop-blur hover:bg-[#ff006e]/15 sm:left-4 sm:top-4 sm:text-[11px] animate-pulse"
+            style={{ animationDuration: "2.4s" }}
+          >
+            📰 Press Wall [P]
+          </button>
+        )}
+
         {/* HUD overlay: bottom bar. On mobile, pad bottom so touch controls
             (Jump button is ~72px tall + 12px inset) don't overlap. */}
         <div className="pointer-events-none absolute left-0 right-0 bottom-0 z-10 flex flex-col gap-2 p-2 pb-[100px] sm:p-4 sm:pb-4">
@@ -428,6 +444,8 @@ export default function PixelPortfolio() {
         />
       )}
 
+      <PressWall open={pressOpen} onClose={() => setPressOpen(false)} />
+
       <TouchControls
         onLeft={(d) => handleRef.current?.pressLeft(d)}
         onRight={(d) => handleRef.current?.pressRight(d)}
@@ -473,4 +491,3 @@ function ControlsHint({ mode }: { mode: PortfolioMode | null }) {
     </div>
   );
 }
-

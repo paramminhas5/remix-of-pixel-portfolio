@@ -152,16 +152,19 @@ function drawGRP(s: SceneCtx) {
     ctx.fillStyle = "#999"; ctx.fillRect(mx + 32, my - 14, 16, 16);
     ctx.fillStyle = "#7a7a60"; ctx.fillRect(mx + 7, my + 10, 66, 15);
   }
-  // Floating price tags drifting up
-  ["₹999", "COMPARE", "BEST!", "₹1,499", "DEAL!", "SAVE!"].forEach((tag, i) => {
+  // Floating price tags drifting up — small text, padded box, never overflows
+  ["₹999", "COMPARE", "BEST", "₹1499", "DEAL", "SAVE"].forEach((tag, i) => {
     const wx = startX + 100 + i * 235;
     const tx = wx - camX;
     if (tx < -140 || tx > W + 140) return;
     const ty = groundY - 195 + Math.sin(t * 1.3 + i) * 22;
-    ctx.strokeStyle = accent + "66"; ctx.lineWidth = 1.5; ctx.strokeRect(tx, ty - 18, 80, 26);
-    ctx.fillStyle = accent + "22"; ctx.fillRect(tx, ty - 18, 80, 26);
-    ctx.fillStyle = accent; ctx.font = "10px 'DM Mono', monospace"; ctx.textAlign = "left";
-    ctx.fillText(tag, tx + 10, ty + 3);
+    const bw = 56, bh = 18;
+    ctx.strokeStyle = accent + "66"; ctx.lineWidth = 1; ctx.strokeRect(tx, ty - bh, bw, bh);
+    ctx.fillStyle = accent + "22"; ctx.fillRect(tx, ty - bh, bw, bh);
+    ctx.fillStyle = accent; ctx.font = "6px 'DM Mono', monospace";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(tag, tx + bw / 2, ty - bh / 2);
+    ctx.textBaseline = "alphabetic";
   });
 }
 
@@ -380,6 +383,66 @@ function drawSole(s: SceneCtx) {
       ctx.fillStyle = c; ctx.fillRect(cx + swing, groundY - 160, 16, 40);
       ctx.fillStyle = "#fff3"; ctx.fillRect(cx + 4 + swing, groundY - 160, 8, 8);
     });
+  }
+  // Crowd silhouettes filling the mid-band so the floor isn't bare
+  for (let i = 0; i < 14; i++) {
+    const wx = startX + 60 + i * (span / 14);
+    const cx = wx - camX * 0.85;
+    if (cx < -40 || cx > W + 40) continue;
+    const bob = Math.sin(t * 1.6 + i * 0.7) * 1.5;
+    const h = 38 + ((i * 11) % 14);
+    ctx.fillStyle = "#0a0014cc";
+    ctx.fillRect(cx - 6, groundY - h + bob, 12, h);          // body
+    ctx.fillRect(cx - 4, groundY - h - 8 + bob, 8, 8);       // head
+  }
+  // Two mannequin plinths to fill the empty mid-band
+  [span * 0.30, span * 0.46].forEach((xf, i) => {
+    const wx = startX + xf;
+    const mx = wx - camX;
+    if (mx < -60 || mx > W + 60) return;
+    // Plinth
+    ctx.fillStyle = "#1a0420"; ctx.fillRect(mx - 14, groundY - 14, 28, 14);
+    ctx.fillStyle = accent + "55"; ctx.fillRect(mx - 14, groundY - 16, 28, 2);
+    // Mannequin body
+    ctx.fillStyle = "#e8d8c0";
+    ctx.fillRect(mx - 4, groundY - 60, 8, 8);                // head
+    ctx.fillRect(mx - 8, groundY - 50, 16, 24);              // torso
+    ctx.fillRect(mx - 7, groundY - 26, 6, 14);               // L leg
+    ctx.fillRect(mx + 1, groundY - 26, 6, 14);               // R leg
+    // Streetwear top
+    ctx.fillStyle = i === 0 ? "#ff006e" : "#a78bfa";
+    ctx.fillRect(mx - 9, groundY - 50, 18, 14);
+    ctx.fillStyle = "#fff4"; ctx.fillRect(mx - 7, groundY - 47, 4, 4);
+  });
+  // Press kiosk (newsstand) — interaction lives here. Tall + readable.
+  const kx = startX + span * 0.78 - camX;
+  if (kx > -120 && kx < W + 160) {
+    // Stand
+    ctx.fillStyle = "#3a0a28"; ctx.fillRect(kx, groundY - 64, 64, 64);
+    ctx.fillStyle = "#5a1240"; ctx.fillRect(kx + 2, groundY - 62, 60, 6);
+    // Newspapers stacked
+    ["#f5f0e8", "#e8d8c0", "#f5f0e8"].forEach((c, i) => {
+      ctx.fillStyle = c; ctx.fillRect(kx + 6 + i * 18, groundY - 56, 16, 22);
+      ctx.fillStyle = "#111"; ctx.fillRect(kx + 8 + i * 18, groundY - 53, 12, 1);
+      ctx.fillRect(kx + 8 + i * 18, groundY - 50, 12, 1);
+      ctx.fillRect(kx + 8 + i * 18, groundY - 47, 8, 1);
+    });
+    // PRESS sign — pulses to draw eye
+    const pulse = 0.7 + Math.sin(t * 3) * 0.3;
+    ctx.save();
+    ctx.shadowBlur = 14 * pulse; ctx.shadowColor = "#ff006e";
+    ctx.fillStyle = "#1a0014"; ctx.fillRect(kx - 4, groundY - 96, 72, 22);
+    ctx.strokeStyle = "#ff006e"; ctx.lineWidth = 2; ctx.strokeRect(kx - 4, groundY - 96, 72, 22);
+    ctx.fillStyle = "#ff9fd4"; ctx.font = "bold 9px 'Press Start 2P', monospace";
+    ctx.textAlign = "center"; ctx.fillText("PRESS", kx + 32, groundY - 81);
+    ctx.restore();
+    // Hint when player nearby
+    const wx = startX + span * 0.78;
+    if (Math.abs(playerX - wx) < 80) {
+      ctx.fillStyle = "#fff"; ctx.font = "7px 'DM Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("[E] OPEN PRESS WALL", kx + 32, groundY - 102);
+    }
   }
 }
 
