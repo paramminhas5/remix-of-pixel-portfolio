@@ -63,6 +63,22 @@ const TOOLS = [
   "Notion",
 ];
 
+const HIGHLIGHTS: { stat: string; label: string }[] = [
+  { stat: "₹1cr+", label: "Event sales (SoleSearch)" },
+  { stat: "₹1cr+", label: "Sponsorships closed" },
+  { stat: "30+", label: "Live events produced" },
+  { stat: "40+", label: "Indian brand partners" },
+  { stat: "15 yrs", label: "Founder + operator" },
+  { stat: "6", label: "Companies built or led" },
+];
+
+const COMPANIES = [
+  "Meesho", "Entri", "Simsim", "Amazon", "Forbes",
+  "Royal Enfield", "boAt", "Budweiser",
+  "CNBC-TV18", "YourStory", "Inc42", "Economic Times",
+  "Quartic.ai", "Investopad", "SoleSearch",
+];
+
 export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
   const chapters = LEVELS.filter((l) => l.id !== "home");
 
@@ -72,10 +88,12 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
         .resume-root { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         .resume-serif { font-family: 'Playfair Display', Georgia, serif; }
         .resume-mono { font-family: 'DM Mono', ui-monospace, monospace; }
+        @page { size: A4; margin: 14mm; }
         @media print {
           .resume-root { background: #fff !important; color: #111 !important; }
           .resume-no-print { display: none !important; }
           .resume-card { break-inside: avoid; }
+          .resume-page-break { break-before: page; page-break-before: always; }
           a { color: #111 !important; text-decoration: underline; }
         }
       `}</style>
@@ -125,6 +143,19 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
             </a>
           </div>
         </header>
+
+        {/* HIGHLIGHTS — recruiter-friendly stat strip */}
+        <section className="resume-card mb-10">
+          <SectionHeading>Highlights</SectionHeading>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {HIGHLIGHTS.map((h) => (
+              <div key={h.label} className="rounded border border-black/15 bg-white p-3">
+                <div className="resume-serif text-2xl font-bold leading-none text-black">{h.stat}</div>
+                <div className="resume-mono mt-1 text-[10px] uppercase tracking-widest text-black/55">{h.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* TWO-COLUMN BODY */}
         <div className="grid gap-10 sm:grid-cols-3">
@@ -203,6 +234,18 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
               </div>
             </section>
 
+            {/* PAGE BREAK — page 2 starts here on print */}
+            <section className="resume-page-break">
+              <SectionHeading>Companies & brands</SectionHeading>
+              <div className="flex flex-wrap gap-1.5">
+                {COMPANIES.map((c) => (
+                  <span key={c} className="rounded border border-black/20 bg-white px-2 py-1 resume-mono text-[10px] text-black/75">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </section>
+
             <section>
               <SectionHeading>Selected press</SectionHeading>
               <ul className="space-y-2">
@@ -225,11 +268,20 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
                 <li><a className="underline" href={CONTACT.twitter} target="_blank" rel="noopener">@paramminhas</a> — building in public</li>
               </ul>
             </section>
+
+            <section>
+              <SectionHeading>Education & languages</SectionHeading>
+              <div className="resume-mono space-y-1 text-[11px] text-black/75">
+                <div>Bachelor's, Computer Science · India</div>
+                <div>Languages: English · Hindi · Punjabi</div>
+                <div>References available on request</div>
+              </div>
+            </section>
           </main>
         </div>
 
         <footer className="mt-16 border-t border-black/10 pt-6 text-center resume-mono text-[10px] uppercase tracking-widest text-black/40">
-          Built as a 2D side-scrolling portfolio · Press ▶ Play to walk through it
+          Page 1 — Impact · Page 2 — Detail · Built as a 2D side-scrolling portfolio
         </footer>
       </div>
     </div>

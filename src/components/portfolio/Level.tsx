@@ -272,6 +272,7 @@ export function LevelView({
     const cvs = canvasRef.current;
     if (!cvs) return;
     const ctx = cvs.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
     let raf = 0;
     let last = performance.now();
     let drawErrorLogged = false;
@@ -287,6 +288,7 @@ export function LevelView({
       raf = requestAnimationFrame(loop);
     };
     const runFrame = (now: number) => {
+      ctx.imageSmoothingEnabled = false;
       const dtSec = (now - last) / 1000;
       last = now;
       const world = worldRef.current;

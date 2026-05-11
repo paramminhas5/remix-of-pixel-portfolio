@@ -257,11 +257,13 @@ export function step(body: Body, world: TileWorld, input: InputFrame, cb: StepCa
   else body.walkAnim = 0;
   if (body.squash > 0) body.squash = Math.max(0, body.squash - 0.12);
   if (body.doubleJumpFx > 0) body.doubleJumpFx -= 1;
-  // Snap to integer whenever grounded — kills sub-pixel jitter regardless of speed.
+  // Only snap when fully stopped — snapping while moving causes visible 1px judder.
   if (body.onGround) {
     body.y = Math.round(body.y);
-    if (Math.abs(body.vx) < 0.6) body.x = Math.round(body.x);
-    if (Math.abs(body.vx) < 0.1) body.blink += 1;
+    if (body.vx === 0) {
+      body.x = Math.round(body.x);
+      body.blink += 1;
+    }
   } else {
     body.blink = 0;
   }

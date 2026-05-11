@@ -232,7 +232,22 @@ export function TitleScreen({
             ✕ Close
           </button>
         )}
-        <div className="mt-6 font-mono text-[8px] uppercase tracking-[0.3em] text-white/30">
+
+        {/* Chapter chips strip — shows the 6 worlds at a glance */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-1.5">
+          {LEVELS.filter((l) => l.id !== "home").map((l) => (
+            <span
+              key={l.id}
+              className="rounded-full border px-2 py-0.5 font-mono text-[8px] uppercase tracking-widest sm:text-[9px]"
+              style={{ borderColor: l.palette.accent, color: l.palette.accent, background: `${l.palette.accent}10` }}
+              title={l.era}
+            >
+              W{l.index} · {l.name}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-4 font-mono text-[8px] uppercase tracking-[0.3em] text-white/30">
           ← → walk · space jump · e talk · esc close
         </div>
       </div>
