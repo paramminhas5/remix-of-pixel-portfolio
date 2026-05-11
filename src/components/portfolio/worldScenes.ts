@@ -294,28 +294,31 @@ function drawSole(s: SceneCtx) {
     if (gx < -200 || gx > W + 200) return;
     ctx.fillStyle = col; ctx.fillRect(gx, groundY - 130 + ((i * 20) % 60), 120, 130);
   });
-  // Shoe shelves (back wall) — shoes near the player bounce
-  for (let shelf = 0; shelf < 7; shelf++) {
-    const sy = groundY - 272 + shelf * 40;
-    ctx.fillStyle = "#180022"; ctx.fillRect(startX - camX, sy, endX - startX, 7);
-    ctx.fillStyle = accent + "55"; ctx.fillRect(startX - camX, sy, endX - startX, 2);
-    const shoeCount = Math.floor((endX - startX) / 100);
+  // Shoe shelves — smaller cells, fewer shelves, only across the back HALF
+  // of the chapter so the stage / press / streetwear rack get room.
+  const shelfStart = startX + 80;
+  const shelfEnd = startX + (endX - startX) * 0.5;
+  for (let shelf = 0; shelf < 4; shelf++) {
+    const sy = groundY - 230 + shelf * 44;
+    ctx.fillStyle = "#180022"; ctx.fillRect(shelfStart - camX, sy, shelfEnd - shelfStart, 5);
+    ctx.fillStyle = accent + "55"; ctx.fillRect(shelfStart - camX, sy, shelfEnd - shelfStart, 1);
+    const shoeStep = 70;
+    const shoeCount = Math.floor((shelfEnd - shelfStart) / shoeStep);
+    const cols = ["#ff006e","#f5f0e8","#00d4ff","#ff8c00","#a78bfa","#2ecc71","#ffd700","#e74c3c","#111","#222"];
     for (let s2 = 0; s2 < shoeCount; s2++) {
-      const wx = startX + s2 * 100 + 12;
+      const wx = shelfStart + s2 * shoeStep + 8;
       const shx = wx - camX;
-      if (shx < -110 || shx > W + 110) continue;
-      const near = Math.abs(playerX - wx) < 140;
-      const bounce = near ? Math.sin(t * 6 + s2) * 4 : 0;
-      const cols = ["#ff006e","#f5f0e8","#00d4ff","#ff8c00","#a78bfa","#2ecc71","#ffd700","#e74c3c","#111","#222"];
+      if (shx < -60 || shx > W + 60) continue;
+      const near = Math.abs(playerX - wx) < 110;
+      const bounce = near ? Math.sin(t * 6 + s2) * 3 : 0;
       const c = cols[(shelf * 5 + s2) % cols.length];
       const c2 = cols[(shelf * 5 + s2 + 4) % cols.length];
-      ctx.fillStyle = "#fff2"; ctx.fillRect(shx, sy - 9, 52, 8);
-      ctx.fillStyle = c; ctx.fillRect(shx + 3, sy - 30 + bounce, 46, 23);
-      ctx.fillStyle = c + "cc"; ctx.fillRect(shx, sy - 26 + bounce, 18, 18);
-      ctx.fillStyle = c2 + "88"; ctx.fillRect(shx + 14, sy - 24 + bounce, 24, 9);
-      ctx.fillStyle = c + "aa"; ctx.fillRect(shx + 21, sy - 40 + bounce, 12, 14);
-      ctx.fillStyle = "#fff6";
-      for (let l = 0; l < 4; l++) ctx.fillRect(shx + 23, sy - 38 + l * 3.5 + bounce, 10, 1.5);
+      // tiny pixel sneaker, ~28x14
+      ctx.fillStyle = "#fff2"; ctx.fillRect(shx, sy - 6, 30, 5);
+      ctx.fillStyle = c; ctx.fillRect(shx + 2, sy - 18 + bounce, 26, 14);
+      ctx.fillStyle = c2 + "cc"; ctx.fillRect(shx + 2, sy - 16 + bounce, 9, 12);
+      ctx.fillStyle = "#fff8"; ctx.fillRect(shx + 14, sy - 10 + bounce, 10, 2);
+      ctx.fillStyle = c + "aa"; ctx.fillRect(shx + 13, sy - 24 + bounce, 7, 8);
     }
   }
   // Neon signs
