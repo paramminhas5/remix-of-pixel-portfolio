@@ -158,24 +158,26 @@ export function EndScreen({
           </div>
         )}
 
-        <div className="mt-8 grid gap-2 sm:grid-cols-3">
-          <a href={`mailto:${CONTACT.email}`} className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            Email
-          </a>
-          <a href={CONTACT.site} target="_blank" rel="noreferrer" className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            catscandance.com
+        {/* Primary CTA — email */}
+        <a
+          href={`mailto:${CONTACT.email}`}
+          className="mt-8 block w-full rounded border-2 border-emerald-300 bg-emerald-400/20 py-4 font-mono text-[13px] font-bold uppercase tracking-widest text-emerald-100 hover:bg-emerald-400/30 transition"
+        >
+          ✉ Get in touch — {CONTACT.email}
+        </a>
+        {/* Secondary links */}
+        <div className="mt-3 grid gap-2 sm:grid-cols-2">
+          <a href={CONTACT.resume} className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
+            📄 Résumé
           </a>
           <a href={CONTACT.linkedin} target="_blank" rel="noreferrer" className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            LinkedIn
+            LinkedIn ↗
           </a>
           <a href={CONTACT.twitter} target="_blank" rel="noreferrer" className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            Twitter
+            Twitter ↗
           </a>
-          <a href={CONTACT.spotify} target="_blank" rel="noreferrer" className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            Spotify
-          </a>
-          <a href={CONTACT.resume} className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
-            Résumé
+          <a href={CONTACT.site} target="_blank" rel="noreferrer" className="rounded border-2 border-white/40 py-3 font-mono text-[11px] uppercase tracking-widest text-white hover:bg-white/10">
+            catscandance.com ↗
           </a>
         </div>
         <button

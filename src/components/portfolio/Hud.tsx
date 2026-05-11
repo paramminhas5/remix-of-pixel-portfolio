@@ -31,6 +31,7 @@ export function Hud({
   nextUnlockXp: number | null;
   nextUnlockLabel: string | null;
   hardUnlocked?: boolean;
+  onCliffNotes: () => void;
 }) {
   const accent = chapter?.palette.accent ?? "#fff";
   const xpPct = nextUnlockXp ? Math.min(100, (xp / nextUnlockXp) * 100) : 100;
@@ -44,6 +45,11 @@ export function Hud({
         <span className="hidden text-white/30 sm:inline">·</span>
         <span title="Skills collected" className="whitespace-nowrap">★ {coins}/{totalSkills}</span>
         <button onClick={onInventory} className="rounded border border-white/30 px-1.5 py-0.5 hover:bg-white/10 sm:px-2">BAG</button>
+        <button
+          onClick={onCliffNotes}
+          className="rounded border border-white/30 px-1.5 py-0.5 hover:bg-white/10 sm:px-2"
+          title="Career overview — 30 seconds"
+        >?</button>
         <button
           onClick={onToggleMode}
           className="rounded border px-1.5 py-0.5 hover:bg-white/10 sm:px-2"
@@ -84,6 +90,7 @@ export function TitleScreen({
   onClose?: () => void;
   showClose?: boolean;
   hardUnlocked?: boolean;
+  onCliffNotes: () => void;
 }) {
   return (
     <div
@@ -188,6 +195,11 @@ export function TitleScreen({
           ▶ Press Start
         </button>
 
+        {/* Cliff-notes shortcut hint */}
+        <div className="mt-4 rounded-lg border border-white/10 bg-white/5 px-4 py-2 font-mono text-[10px] text-white/50 text-center">
+          Press <kbd className="rounded border border-white/20 bg-white/10 px-1 font-bold text-white/70">?</kbd> any time for a 30-second career overview
+        </div>
+
         <div className="mt-5 flex items-center justify-center gap-1 font-mono text-[10px] uppercase tracking-widest text-white/55 sm:gap-3 sm:text-[11px]">
           <button
             onClick={() => onPick("quick")}
@@ -208,7 +220,7 @@ export function TitleScreen({
             </>
           )}
           <a
-            href="mailto:minhas.param@gmail.com"
+            href="mailto:param@catscandance.com"
             className="rounded px-2 py-1 hover:bg-white/10 hover:text-white"
           >
             ✉ Contact

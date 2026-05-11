@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import PixelPortfolio from "@/components/PixelPortfolio";
 
-const TITLE = "Param Minhas — Builder. Designer. Creative Director. Music Producer.";
+const TITLE = "Param Minhas — Builder. AI-native marketer. 15 years of building.";
 const DESCRIPTION =
   "A 2D pixel-game portfolio walking through 15 years of building — GetRightPrice, Hab Housing, Octo/Quartic.ai, Investopad, SoleSearch, Cats Can Dance & Iterate.";
 
@@ -17,6 +17,8 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: TITLE },
       { name: "twitter:description", content: DESCRIPTION },
+      { property: "og:image", content: "https://catscandance.com/og-preview.png" },
+      { name: "twitter:image", content: "https://catscandance.com/og-preview.png" },
     ],
   }),
   component: Index,
@@ -26,7 +28,7 @@ function Index() {
   return (
     <main>
       <h1 className="sr-only">
-        Param Minhas — Builder, Designer, Creative Director, Music Producer
+        Param Minhas — Builder, AI-native marketer, 15 years of building
       </h1>
       <PixelPortfolio />
     </main>

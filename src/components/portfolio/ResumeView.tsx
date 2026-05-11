@@ -1,44 +1,18 @@
-import { LEVELS, CONTACT } from "./data";
+import { LEVELS, CONTACT, PRESS } from "./data";
 
-// Skills grouped by domain — pulled from the per-chapter coin definitions but
-// deduped and re-categorised for a recruiter-friendly read.
+// Skills grouped by domain
 const SKILL_GROUPS: { label: string; skills: string[] }[] = [
   {
     label: "Strategy & Leadership",
-    skills: [
-      "Founder ops",
-      "Product strategy",
-      "Fundraising",
-      "Storytelling",
-      "Vision",
-      "First-principles",
-      "Hiring",
-      "Brand strategy",
-    ],
+    skills: ["Founder ops", "Product strategy", "Fundraising", "Storytelling", "Vision", "First-principles", "Hiring", "Brand strategy"],
   },
   {
     label: "Design & Direction",
-    skills: [
-      "Creative direction",
-      "Brand identity",
-      "Art direction",
-      "UI / UX",
-      "Visual systems",
-      "Taste",
-      "Typography",
-    ],
+    skills: ["Creative direction", "Brand identity", "Art direction", "UI / UX", "Visual systems", "Taste", "Typography"],
   },
   {
     label: "Engineering & AI",
-    skills: [
-      "Full-stack",
-      "Conversational AI",
-      "LLM tooling",
-      "Prompt engineering",
-      "Data pipelines",
-      "Web scraping",
-      "Rapid prototyping",
-    ],
+    skills: ["Full-stack", "Conversational AI", "LLM tooling", "Prompt engineering", "Data pipelines", "Web scraping", "Rapid prototyping"],
   },
   {
     label: "Music & Performance",
@@ -50,26 +24,15 @@ const SKILL_GROUPS: { label: string; skills: string[] }[] = [
   },
 ];
 
-const TOOLS = [
-  "Figma",
-  "Cursor",
-  "Claude / GPT",
-  "TypeScript",
-  "React",
-  "Node",
-  "Postgres",
-  "Ableton Live",
-  "Logic Pro",
-  "Notion",
-];
+const TOOLS = ["Figma", "Cursor", "Claude / GPT", "TypeScript", "React", "Node", "Postgres", "Ableton Live", "Logic Pro", "Notion"];
 
 const HIGHLIGHTS: { stat: string; label: string }[] = [
-  { stat: "₹1cr+", label: "Event sales (SoleSearch)" },
+  { stat: "$795K", label: "Raised (SoleSearch)" },
+  { stat: "₹1cr+", label: "Live event sales" },
   { stat: "₹1cr+", label: "Sponsorships closed" },
   { stat: "30+", label: "Live events produced" },
-  { stat: "40+", label: "Indian brand partners" },
+  { stat: "350K+", label: "Community followers" },
   { stat: "15 yrs", label: "Founder + operator" },
-  { stat: "6", label: "Companies built or led" },
 ];
 
 const COMPANIES = [
@@ -79,7 +42,7 @@ const COMPANIES = [
   "Quartic.ai", "Investopad", "SoleSearch",
 ];
 
-export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
+export function ResumeView({ onBackToGame }: { onBackToGame?: () => void }) {
   const chapters = LEVELS.filter((l) => l.id !== "home");
 
   return (
@@ -108,43 +71,56 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
           >
             ⎙ Print / PDF
           </button>
-          <button
-            onClick={onBackToGame}
-            className="rounded-full border border-emerald-700 bg-emerald-700 px-3 py-1 resume-mono text-[10px] uppercase text-white hover:bg-emerald-800"
-          >
-            ▶ Play game
-          </button>
+          {onBackToGame && (
+            <button
+              onClick={onBackToGame}
+              className="rounded-full border border-emerald-700 bg-emerald-700 px-3 py-1 resume-mono text-[10px] uppercase text-white hover:bg-emerald-800"
+            >
+              ▶ Play game
+            </button>
+          )}
         </div>
       </div>
 
       <div className="mx-auto max-w-5xl px-5 py-10 sm:px-10 sm:py-14">
         {/* HERO */}
         <header className="mb-10 border-b border-black/10 pb-8">
-          <div className="resume-mono text-[10px] uppercase tracking-[0.3em] text-black/50">
-            Builder · Designer · Creative Director · Music Producer
-          </div>
-          <h1 className="resume-serif mt-1 text-4xl font-bold leading-tight sm:text-6xl">Param Minhas</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/75 sm:text-base">
-            15 years of building across e-commerce, real estate, conversational AI, sneaker culture, and AI-native marketing.
-            Founder, operator, and creative director — same person shipped each chapter.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2 resume-mono text-[11px]">
-            <a href={`mailto:${CONTACT.email}`} className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
-              ✉ {CONTACT.email}
-            </a>
-            <a href={CONTACT.linkedin} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
-              in/paramminhas
-            </a>
-            <a href={CONTACT.twitter} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
-              @paramminhas
-            </a>
-            <a href={CONTACT.site} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
-              ★ catscandance.com
-            </a>
+          <div className="flex items-start gap-6">
+            {/* Profile avatar */}
+            <div
+              className="resume-no-print hidden shrink-0 sm:flex h-20 w-20 items-center justify-center rounded-full border-2 border-black/15 bg-gradient-to-br from-indigo-100 to-purple-100"
+              aria-label="Param Minhas"
+            >
+              <span className="resume-serif text-2xl font-bold text-[#3a2c6a] select-none">PM</span>
+            </div>
+            <div className="flex-1">
+              <div className="resume-mono text-[10px] uppercase tracking-[0.3em] text-black/50">
+                AI-native Marketing · Builder · Creative Director
+              </div>
+              <h1 className="resume-serif mt-1 text-4xl font-bold leading-tight sm:text-6xl">Param Minhas</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/75 sm:text-base">
+                15 years of building across e-commerce, real estate, conversational AI, sneaker culture, and AI-native marketing.
+                Founder of Iterate — where operator instinct meets AI speed.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2 resume-mono text-[11px]">
+                <a href={`mailto:${CONTACT.email}`} className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
+                  ✉ {CONTACT.email}
+                </a>
+                <a href={CONTACT.linkedin} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
+                  in/paramminhas
+                </a>
+                <a href={CONTACT.twitter} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
+                  @paramminhas
+                </a>
+                <a href={CONTACT.site} target="_blank" rel="noopener" className="rounded-full border border-black/25 px-3 py-1 hover:bg-black/5">
+                  ★ catscandance.com
+                </a>
+              </div>
+            </div>
           </div>
         </header>
 
-        {/* HIGHLIGHTS — recruiter-friendly stat strip */}
+        {/* HIGHLIGHTS */}
         <section className="resume-card mb-10">
           <SectionHeading>Highlights</SectionHeading>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -159,7 +135,7 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
 
         {/* TWO-COLUMN BODY */}
         <div className="grid gap-10 sm:grid-cols-3">
-          {/* LEFT — Skills, Tools, Education */}
+          {/* LEFT */}
           <aside className="space-y-8 sm:col-span-1">
             <section className="resume-card">
               <SectionHeading>Skills</SectionHeading>
@@ -169,10 +145,7 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
                     <div className="resume-mono mb-1 text-[9px] uppercase tracking-widest text-black/50">{g.label}</div>
                     <div className="flex flex-wrap gap-1">
                       {g.skills.map((s) => (
-                        <span
-                          key={s}
-                          className="rounded border border-black/15 bg-white px-1.5 py-0.5 resume-mono text-[10px] text-black/75"
-                        >
+                        <span key={s} className="rounded border border-black/15 bg-white px-1.5 py-0.5 resume-mono text-[10px] text-black/75">
                           {s}
                         </span>
                       ))}
@@ -186,9 +159,7 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
               <SectionHeading>Tools</SectionHeading>
               <div className="flex flex-wrap gap-1">
                 {TOOLS.map((t) => (
-                  <span key={t} className="rounded border border-black/15 px-1.5 py-0.5 resume-mono text-[10px] text-black/70">
-                    {t}
-                  </span>
+                  <span key={t} className="rounded border border-black/15 px-1.5 py-0.5 resume-mono text-[10px] text-black/70">{t}</span>
                 ))}
               </div>
             </section>
@@ -199,12 +170,21 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
             </section>
 
             <section className="resume-card">
+              <SectionHeading>Education</SectionHeading>
+              <div className="resume-mono space-y-1 text-[11px] text-black/70">
+                <div className="font-bold text-black/85">Bachelor of Engineering, CS</div>
+                <div>Bangalore Institute of Technology</div>
+                <div className="text-black/50">Supplemented by 15 years of shipping</div>
+              </div>
+            </section>
+
+            <section className="resume-card">
               <SectionHeading>Based</SectionHeading>
               <div className="resume-mono text-[11px] text-black/70">Bengaluru · Open to remote / EU / US</div>
             </section>
           </aside>
 
-          {/* RIGHT — Experience + Press */}
+          {/* RIGHT */}
           <main className="space-y-10 sm:col-span-2">
             <section>
               <SectionHeading>Experience</SectionHeading>
@@ -234,14 +214,12 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
               </div>
             </section>
 
-            {/* PAGE BREAK — page 2 starts here on print */}
+            {/* PAGE BREAK */}
             <section className="resume-page-break">
               <SectionHeading>Companies & brands</SectionHeading>
               <div className="flex flex-wrap gap-1.5">
                 {COMPANIES.map((c) => (
-                  <span key={c} className="rounded border border-black/20 bg-white px-2 py-1 resume-mono text-[10px] text-black/75">
-                    {c}
-                  </span>
+                  <span key={c} className="rounded border border-black/20 bg-white px-2 py-1 resume-mono text-[10px] text-black/75">{c}</span>
                 ))}
               </div>
             </section>
@@ -249,12 +227,10 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
             <section>
               <SectionHeading>Selected press</SectionHeading>
               <ul className="space-y-2">
-                {chapters.map((lv) => (
-                  <li key={lv.id} className="flex items-baseline gap-3">
-                    <span className="resume-mono shrink-0 text-[10px] uppercase tracking-widest text-black/40">
-                      {lv.clipping.source}
-                    </span>
-                    <span className="text-sm text-black/80">{lv.clipping.title}</span>
+                {PRESS.map((p, i) => (
+                  <li key={i} className="flex items-baseline gap-3">
+                    <span className="resume-mono shrink-0 text-[10px] uppercase tracking-widest text-black/40">{p.outlet}</span>
+                    <span className="text-sm text-black/80">{p.title}</span>
                   </li>
                 ))}
               </ul>
@@ -268,20 +244,11 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
                 <li><a className="underline" href={CONTACT.twitter} target="_blank" rel="noopener">@paramminhas</a> — building in public</li>
               </ul>
             </section>
-
-            <section>
-              <SectionHeading>Education & languages</SectionHeading>
-              <div className="resume-mono space-y-1 text-[11px] text-black/75">
-                <div>Bachelor's, Computer Science · India</div>
-                <div>Languages: English · Hindi · Punjabi</div>
-                <div>References available on request</div>
-              </div>
-            </section>
           </main>
         </div>
 
         <footer className="mt-16 border-t border-black/10 pt-6 text-center resume-mono text-[10px] uppercase tracking-widest text-black/40">
-          Page 1 — Impact · Page 2 — Detail · Built as a 2D side-scrolling portfolio
+          Page 1 — Impact · Page 2 — Detail · Also available as a playable 2D portfolio
         </footer>
       </div>
     </div>

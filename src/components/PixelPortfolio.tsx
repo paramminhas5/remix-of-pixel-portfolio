@@ -45,6 +45,37 @@ function makeCollected(): CollectedMap {
   );
 }
 
+// ── Progress persistence ──────────────────────────────────────────────────────
+const PROGRESS_KEY = "ppfolio.progress.v1";
+const COLLECTED_KEY = "ppfolio.collected.v1";
+const SKILLS_KEY = "ppfolio.skills.v1";
+const CLIPPINGS_KEY = "ppfolio.clippings.v1";
+const QUOTES_KEY = "ppfolio.quotes.v1";
+const CLEARED_KEY = "ppfolio.cleared.v1";
+
+function loadProgress(): import("./portfolio/WorldMap").Progress {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return emptyProgress();
+}
+function saveProgress(p: import("./portfolio/WorldMap").Progress) {
+  try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {}
+}
+function loadCollectedSkills(): { skill: string; levelId: string }[] {
+  try { return JSON.parse(localStorage.getItem(SKILLS_KEY) ?? "[]"); } catch { return []; }
+}
+function loadCollectedClippings(): { levelId: string; title: string; body: string; source: string }[] {
+  try { return JSON.parse(localStorage.getItem(CLIPPINGS_KEY) ?? "[]"); } catch { return []; }
+}
+function loadCollectedQuotes(): { levelId: string; name: string; quote: string }[] {
+  try { return JSON.parse(localStorage.getItem(QUOTES_KEY) ?? "[]"); } catch { return []; }
+}
+function loadClearedSet(): Set<string> {
+  try { return new Set(JSON.parse(localStorage.getItem(CLEARED_KEY) ?? "[]")); } catch { return new Set(); }
+}
+
 export default function PixelPortfolio() {
   useEffect(ensureFonts, []);
 
@@ -76,16 +107,16 @@ export default function PixelPortfolio() {
     handleRef.current?.pressJump(false);
   }, [mode]);
 
-  const [progress, setProgress] = useState<Progress>(() => emptyProgress());
+  const [progress, setProgress] = useState<Progress>(() => loadProgress());
   const [collected, setCollected] = useState<CollectedMap>(() => makeCollected());
-  const [clearedSet, setClearedSet] = useState<Set<string>>(() => new Set());
+  const [clearedSet, setClearedSet] = useState<Set<string>>(() => loadClearedSet());
   const [activeChapter, setActiveChapter] = useState<Chapter | null>(null);
 
-  const [collectedSkills, setCollectedSkills] = useState<{ skill: string; levelId: string }[]>([]);
+  const [collectedSkills, setCollectedSkills] = useState<{ skill: string; levelId: string }[]>(() => loadCollectedSkills());
   const [collectedClippings, setCollectedClippings] = useState<
     { levelId: string; title: string; body: string; source: string }[]
-  >([]);
-  const [collectedQuotes, setCollectedQuotes] = useState<{ levelId: string; name: string; quote: string }[]>([]);
+  >(() => loadCollectedClippings());
+  const [collectedQuotes, setCollectedQuotes] = useState<{ levelId: string; name: string; quote: string }[]>(() => loadCollectedQuotes());
 
   // overlays
   const [npcOpen, setNpcOpen] = useState<{ levelId: string; index: number } | null>(null);
@@ -100,6 +131,13 @@ export default function PixelPortfolio() {
   const totalSkills = useMemo(() => LEVELS.reduce((a, l) => a + l.coins.length, 0), []);
 
   const handleRef = useRef<LevelHandle | null>(null);
+
+  // Persist progress & inventory to localStorage on every change
+  useEffect(() => { saveProgress(progress); }, [progress]);
+  useEffect(() => { try { localStorage.setItem(SKILLS_KEY, JSON.stringify(collectedSkills)); } catch {} }, [collectedSkills]);
+  useEffect(() => { try { localStorage.setItem(CLIPPINGS_KEY, JSON.stringify(collectedClippings)); } catch {} }, [collectedClippings]);
+  useEffect(() => { try { localStorage.setItem(QUOTES_KEY, JSON.stringify(collectedQuotes)); } catch {} }, [collectedQuotes]);
+  useEffect(() => { try { localStorage.setItem(CLEARED_KEY, JSON.stringify([...clearedSet])); } catch {} }, [clearedSet]);
 
   const overlayOpen = !!(npcOpen || clipOpen || secretOpen || minigameOpen || invOpen || cliffOpen || pressOpen);
   useEffect(() => {
@@ -336,6 +374,7 @@ export default function PixelPortfolio() {
                 setMode(next);
               }}
               onSkipChapter={() => handleRef.current?.warpToNextChapter()}
+              onCliffNotes={() => setCliffOpen(true)}
               xp={xp}
               nextUnlockXp={nextUnlock?.xp ?? null}
               nextUnlockLabel={nextUnlock?.label ?? null}

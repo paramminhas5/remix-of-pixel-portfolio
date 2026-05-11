@@ -490,13 +490,22 @@ const ITERATE: Level = {
 export const LEVELS: Level[] = [HOME, ORIGIN, GRP, HAB, AI, INVESTOPAD, SOLE, CCD, ITERATE];
 
 export const CONTACT = {
-  email: "minhas.param@gmail.com",
+  email: "param@catscandance.com",
   site: "https://catscandance.com",
   linkedin: "https://www.linkedin.com/in/paramminhas/",
   twitter: "https://twitter.com/paramminhas",
-  spotify: "#",
-  resume: "#",
+  spotify: "https://open.spotify.com/artist/catscandance",
+  resume: "/resume",
 };
+
+// Real press mentions — used in ResumeView "Selected Press" section
+export const PRESS: { outlet: string; title: string; url?: string }[] = [
+  { outlet: "CNBC-TV18", title: "SoleSearch: Building India's sneaker culture from the ground up" },
+  { outlet: "YourStory", title: "From Bengaluru to boardroom: Param Minhas on 15 years of building" },
+  { outlet: "Inc42", title: "SoleSearch raises $795K to scale India's first sneaker marketplace" },
+  { outlet: "Economic Times", title: "Rannvijay Singha backs SoleSearch, India's streetwear-first platform" },
+  { outlet: "Quartic.ai", title: "Octo acquired — founding team joins Quartic.ai, India's enterprise AI pioneer" },
+];
 
 export const ALL_SKILLS_BY_LEVEL: Record<string, string[]> = Object.fromEntries(
   LEVELS.map((l) => [l.id, l.coins.map((c) => c.skill)]),

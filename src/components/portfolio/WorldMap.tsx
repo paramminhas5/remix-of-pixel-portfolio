@@ -18,9 +18,9 @@ const CHAPTER_ICON: Record<string, string> = {
   hab: "⌂",
   ai: "◈",
   investopad: "▲",
-  superkicks: "♔",
-  catscandance: "♪",
-  paramx: "◐",
+  sole: "♔",
+  ccd: "♪",
+  iterate: "◐",
 };
 
 // Pixel-art wooden chapter ribbon — pinned to top of game.
