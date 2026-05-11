@@ -17,6 +17,7 @@ import { ChapterFlash } from "./portfolio/ChapterFlash";
 import { CliffNotes } from "./portfolio/CliffNotes";
 import { SkillTree, getSkillIcon } from "./portfolio/SkillTree";
 import { ResumeView } from "./portfolio/ResumeView";
+import { PressWall } from "./portfolio/PressWall";
 import { QuickBanner, type Banner } from "./portfolio/QuickBanner";
 import { setMuted as setAudioMuted, sfx } from "./portfolio/audio";
 import { setEngineMode } from "./portfolio/engine";
