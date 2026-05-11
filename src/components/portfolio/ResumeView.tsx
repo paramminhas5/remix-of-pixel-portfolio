@@ -63,6 +63,22 @@ const TOOLS = [
   "Notion",
 ];
 
+const HIGHLIGHTS: { stat: string; label: string }[] = [
+  { stat: "₹1cr+", label: "Event sales (SoleSearch)" },
+  { stat: "₹1cr+", label: "Sponsorships closed" },
+  { stat: "30+", label: "Live events produced" },
+  { stat: "40+", label: "Indian brand partners" },
+  { stat: "15 yrs", label: "Founder + operator" },
+  { stat: "6", label: "Companies built or led" },
+];
+
+const COMPANIES = [
+  "Meesho", "Entri", "Simsim", "Amazon", "Forbes",
+  "Royal Enfield", "boAt", "Budweiser",
+  "CNBC-TV18", "YourStory", "Inc42", "Economic Times",
+  "Quartic.ai", "Investopad", "SoleSearch",
+];
+
 export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
   const chapters = LEVELS.filter((l) => l.id !== "home");
 
