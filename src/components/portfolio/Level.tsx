@@ -43,6 +43,8 @@ import {
 import { sfx } from "./audio";
 import { Emitter, weatherForChapter } from "./Particles";
 import { drawVignette } from "./Lighting";
+import { drawWorldScenes } from "./worldScenes";
+import { drawPlayerSprite, spriteReady } from "./playerSprite";
 
 export type LevelEvent =
   | { kind: "coin"; levelId: string; index: number; skill: string }
