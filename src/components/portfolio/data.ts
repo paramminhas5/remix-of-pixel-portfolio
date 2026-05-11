@@ -420,9 +420,9 @@ const CCD: Level = {
   metrics: { role: "Founder · Cats Can Dance", years: "Now",
     outcome: "Music label + pet culture brand. The work that exists because it has to.",
     bullets: ["Original music releases", "Pet-forward brand world", "Live events + creative IP"] },
-  map: buildMap({ width: 70, spawn: 2, npcGxs: [6, 36, 54], qBlock: 22, minigame: 48, secret: 62,
-    coinTopGxs: [10, 26, 42, 58], coinMidGxs: [16, 32, 50],
-    platforms: [[8, 5], [24, 5], [40, 5], [56, 5]] }),
+  map: buildMap({ width: 50, spawn: 2, npcGxs: [5, 22, 38], qBlock: 16, minigame: 32, secret: 44,
+    coinTopGxs: [10, 20, 30, 42], coinMidGxs: [14, 26, 36],
+    platforms: [[8, 5], [22, 5], [36, 5]] }),
   coins: [
     { gx: 10, gy: 3, skill: "Music production" }, { gx: 26, gy: 3, skill: "Label A&R" },
     { gx: 42, gy: 3, skill: "Pet brand IP" }, { gx: 58, gy: 3, skill: "Live events" },
