@@ -90,6 +90,7 @@ export default function PixelPortfolio() {
   const [secretOpen, setSecretOpen] = useState<Level | null>(null);
   const [minigameOpen, setMinigameOpen] = useState<Level | null>(null);
   const [invOpen, setInvOpen] = useState(false);
+  const [pressOpen, setPressOpen] = useState(false);
   const [muted, setMuted] = useState(true);
   useEffect(() => setAudioMuted(muted), [muted]);
 
