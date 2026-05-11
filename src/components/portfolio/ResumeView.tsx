@@ -88,10 +88,12 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
         .resume-root { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
         .resume-serif { font-family: 'Playfair Display', Georgia, serif; }
         .resume-mono { font-family: 'DM Mono', ui-monospace, monospace; }
+        @page { size: A4; margin: 14mm; }
         @media print {
           .resume-root { background: #fff !important; color: #111 !important; }
           .resume-no-print { display: none !important; }
           .resume-card { break-inside: avoid; }
+          .resume-page-break { break-before: page; page-break-before: always; }
           a { color: #111 !important; text-decoration: underline; }
         }
       `}</style>
