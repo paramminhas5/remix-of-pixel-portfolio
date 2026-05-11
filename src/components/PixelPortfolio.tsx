@@ -444,6 +444,8 @@ export default function PixelPortfolio() {
         />
       )}
 
+      <PressWall open={pressOpen} onClose={() => setPressOpen(false)} />
+
       <TouchControls
         onLeft={(d) => handleRef.current?.pressLeft(d)}
         onRight={(d) => handleRef.current?.pressRight(d)}
