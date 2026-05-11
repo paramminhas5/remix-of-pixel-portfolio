@@ -491,5 +491,3 @@ function ControlsHint({ mode }: { mode: PortfolioMode | null }) {
     </div>
   );
 }
-      <PressWall open={pressOpen} onClose={() => setPressOpen(false)} />
-
