@@ -117,7 +117,7 @@ export default function PixelPortfolio() {
         setCliffOpen((v) => !v);
       } else if (e.key === "k" || e.key === "K") {
         setSkillTreeOpen((v) => !v);
-      } else if ((e.key === "p" || e.key === "P") && activeChapter?.levelId === "sole") {
+      } else if (e.key === "p" || e.key === "P") {
         setPressOpen((v) => !v);
       } else if (e.key === "Escape") {
         setNpcOpen(null);
