@@ -234,6 +234,18 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
               </div>
             </section>
 
+            {/* PAGE BREAK — page 2 starts here on print */}
+            <section className="resume-page-break">
+              <SectionHeading>Companies & brands</SectionHeading>
+              <div className="flex flex-wrap gap-1.5">
+                {COMPANIES.map((c) => (
+                  <span key={c} className="rounded border border-black/20 bg-white px-2 py-1 resume-mono text-[10px] text-black/75">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </section>
+
             <section>
               <SectionHeading>Selected press</SectionHeading>
               <ul className="space-y-2">
@@ -256,11 +268,20 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
                 <li><a className="underline" href={CONTACT.twitter} target="_blank" rel="noopener">@paramminhas</a> — building in public</li>
               </ul>
             </section>
+
+            <section>
+              <SectionHeading>Education & languages</SectionHeading>
+              <div className="resume-mono space-y-1 text-[11px] text-black/75">
+                <div>Bachelor's, Computer Science · India</div>
+                <div>Languages: English · Hindi · Punjabi</div>
+                <div>References available on request</div>
+              </div>
+            </section>
           </main>
         </div>
 
         <footer className="mt-16 border-t border-black/10 pt-6 text-center resume-mono text-[10px] uppercase tracking-widest text-black/40">
-          Built as a 2D side-scrolling portfolio · Press ▶ Play to walk through it
+          Page 1 — Impact · Page 2 — Detail · Built as a 2D side-scrolling portfolio
         </footer>
       </div>
     </div>
