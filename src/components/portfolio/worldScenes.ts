@@ -384,6 +384,66 @@ function drawSole(s: SceneCtx) {
       ctx.fillStyle = "#fff3"; ctx.fillRect(cx + 4 + swing, groundY - 160, 8, 8);
     });
   }
+  // Crowd silhouettes filling the mid-band so the floor isn't bare
+  for (let i = 0; i < 14; i++) {
+    const wx = startX + 60 + i * (span / 14);
+    const cx = wx - camX * 0.85;
+    if (cx < -40 || cx > W + 40) continue;
+    const bob = Math.sin(t * 1.6 + i * 0.7) * 1.5;
+    const h = 38 + ((i * 11) % 14);
+    ctx.fillStyle = "#0a0014cc";
+    ctx.fillRect(cx - 6, groundY - h + bob, 12, h);          // body
+    ctx.fillRect(cx - 4, groundY - h - 8 + bob, 8, 8);       // head
+  }
+  // Two mannequin plinths to fill the empty mid-band
+  [span * 0.30, span * 0.46].forEach((xf, i) => {
+    const wx = startX + xf;
+    const mx = wx - camX;
+    if (mx < -60 || mx > W + 60) return;
+    // Plinth
+    ctx.fillStyle = "#1a0420"; ctx.fillRect(mx - 14, groundY - 14, 28, 14);
+    ctx.fillStyle = accent + "55"; ctx.fillRect(mx - 14, groundY - 16, 28, 2);
+    // Mannequin body
+    ctx.fillStyle = "#e8d8c0";
+    ctx.fillRect(mx - 4, groundY - 60, 8, 8);                // head
+    ctx.fillRect(mx - 8, groundY - 50, 16, 24);              // torso
+    ctx.fillRect(mx - 7, groundY - 26, 6, 14);               // L leg
+    ctx.fillRect(mx + 1, groundY - 26, 6, 14);               // R leg
+    // Streetwear top
+    ctx.fillStyle = i === 0 ? "#ff006e" : "#a78bfa";
+    ctx.fillRect(mx - 9, groundY - 50, 18, 14);
+    ctx.fillStyle = "#fff4"; ctx.fillRect(mx - 7, groundY - 47, 4, 4);
+  });
+  // Press kiosk (newsstand) — interaction lives here. Tall + readable.
+  const kx = startX + span * 0.78 - camX;
+  if (kx > -120 && kx < W + 160) {
+    // Stand
+    ctx.fillStyle = "#3a0a28"; ctx.fillRect(kx, groundY - 64, 64, 64);
+    ctx.fillStyle = "#5a1240"; ctx.fillRect(kx + 2, groundY - 62, 60, 6);
+    // Newspapers stacked
+    ["#f5f0e8", "#e8d8c0", "#f5f0e8"].forEach((c, i) => {
+      ctx.fillStyle = c; ctx.fillRect(kx + 6 + i * 18, groundY - 56, 16, 22);
+      ctx.fillStyle = "#111"; ctx.fillRect(kx + 8 + i * 18, groundY - 53, 12, 1);
+      ctx.fillRect(kx + 8 + i * 18, groundY - 50, 12, 1);
+      ctx.fillRect(kx + 8 + i * 18, groundY - 47, 8, 1);
+    });
+    // PRESS sign — pulses to draw eye
+    const pulse = 0.7 + Math.sin(t * 3) * 0.3;
+    ctx.save();
+    ctx.shadowBlur = 14 * pulse; ctx.shadowColor = "#ff006e";
+    ctx.fillStyle = "#1a0014"; ctx.fillRect(kx - 4, groundY - 96, 72, 22);
+    ctx.strokeStyle = "#ff006e"; ctx.lineWidth = 2; ctx.strokeRect(kx - 4, groundY - 96, 72, 22);
+    ctx.fillStyle = "#ff9fd4"; ctx.font = "bold 9px 'Press Start 2P', monospace";
+    ctx.textAlign = "center"; ctx.fillText("PRESS", kx + 32, groundY - 81);
+    ctx.restore();
+    // Hint when player nearby
+    const wx = startX + span * 0.78;
+    if (Math.abs(playerX - wx) < 80) {
+      ctx.fillStyle = "#fff"; ctx.font = "7px 'DM Mono', monospace";
+      ctx.textAlign = "center";
+      ctx.fillText("[E] OPEN PRESS WALL", kx + 32, groundY - 102);
+    }
+  }
 }
 
 // ─── CATS CAN DANCE + ITERATE — vinyl, cats, mixing desk ────────
