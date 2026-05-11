@@ -1,109 +1,59 @@
+## Goal
 
-# v16 — Final polish for recruiters
+Bring the React pixel-portfolio up to (and beyond) the v7 HTML reference: a brand-new player character, all 8 chapters with the v7 copy, world-specific set pieces that actually tell the story to recruiters, SoleSearch as the largest, richest world with live-fetched press articles, and a visual bar set by the reference pixel-art screenshots.
 
-Six tightly-scoped fixes. No new dependencies, no engine logic rewrites.
+## What changes
 
-## 1. Player jitter — fix the actual cause
+### 1. New player character
+- Generate a transparent pixel-art sprite sheet (idle 2-frame, walk 4-frame, jump 1-frame, both facings) saved to `src/assets/player.png`.
+- Add a `Player.tsx` renderer in `portfolio/` that draws from the sheet (image-rendered: pixelated) and falls back to a hand-drawn polished pixel character (multi-tone hair, jacket, sneakers, animated bob — same style family as the reference image) if the sprite fails to load.
+- Replace current player draw call inside `engine.ts` / `Level.tsx` with the new component.
 
-Past attempts rounded the player position but the `drawPlayer` call still receives `body.x - camX` rounded *separately* from `body.x` rounding inside the engine. When the engine snaps `body.x` to integer only when fully stopped (`Math.abs(vx) < 0.1`) but the camera follows the un-rounded `x`, a 1-frame mismatch reintroduces a 1px shimmer between camera lerp and sprite position. Fixes:
+### 2. Port v7 chapter data
+Rewrite `src/components/portfolio/data.ts` to match the 8 chapters from `param-portfolio-v7.html`:
+Origin (Bengaluru) · GetRightPrice · Hab Housing · AI/Octo · Investopad · **SoleSearch** · Cats Can Dance · Iterate.
+- Each chapter gets `did / learned / matters` long-form text, era label, accent color, and the v7 tag list — wired into `ChapterIntro`, `CliffNotes`, `ResumeView`, `Cards`, the dialog box.
+- SoleSearch chapter gets ~2x the world width and ~2x the hotspots/coins/NPCs of other worlds (so it's clearly the largest beat).
 
-- In `engine.ts step()`: round `body.x` to integer **every frame on ground when |vx| < 0.6** (not just <0.1) and always round `body.y` when on ground. This eliminates the float drift while walking slowly.
-- In `Level.tsx`: compute `const px = Math.round(body.x); const cx = Math.round(cameraX(px + body.w/2, W, world));` then pass `px - cx` to drawPlayer. Currently `body.x` is read fresh and `cameraX` operates on `body.x + body.w/2` — both must use the same rounded value, or the delta drifts.
-- In `drawPlayer`: drop the `ctx.scale(-1,1)` mirror when facing left and instead pre-flip via integer x-offset (manually swap left/right rect x coords). Negative scale reflects all interior `fillRect` through a fractional axis when x is even and produces 1px shimmer when the player turns.
-- Quantize `walkAnim` advance to 1/4 steps so the leg frame doesn't switch mid-pixel: in engine `body.walkAnim += 0.25` only when `|vx| > 0.5 && onGround`, and pass `Math.floor(walkAnim)` as before.
-- Drop the `drawPlayerGlow` radial-gradient call — radial gradients re-rasterize each frame and shimmer near the player. Replace with a single pre-computed pixel halo (3 concentric `fillRect` rings with fixed alpha) drawn at integer offsets.
+### 3. Per-world scenery (port + push beyond)
+New `worldScenes.ts` module with one render function per chapter, called from `Level.tsx` as a parallax layer behind the tile grid. Each scene ports the v7 set pieces and adds a second parallax band + lighting pass aiming at the reference screenshots:
+- **Origin**: Bengaluru rooftop — stacked apartment silhouettes, water tank, clothesline, pulsing moon labelled "Bengaluru, India".
+- **GetRightPrice**: internet café — animated CRT monitors running price-comparison text, floating ₹ price tags.
+- **Hab Housing**: rental towers with lit/unlit windows, "FOR RENT" signs, autos driving across screen, street lamps.
+- **AI/Octo + Investopad**: server racks with blinking LEDs + VU bars, data streams matching player velocity, floating chat bubbles.
+- **SoleSearch (centerpiece)**: 7 shoe shelves (shoes bounce when player nears), neon DRIP/HYPE/CULTURE/AUTHENTIC signs, stage with Rannvijay silhouette, streetwear rack swaying, plus a new "press wall" zone that shows the live-fetched articles.
+- **Cats Can Dance**: rotating vinyl records, three cats that drift toward the player, mixing desk with VU meters, sound wave across the floor, music-note particles.
+- **Iterate**: AI grid, data bars that pulse to walk speed, floating AI-term cards.
 
-## 2. Sim (Quick) autopilot — gets stuck between worlds
+### 4. SoleSearch live press wall
+- Enable the **Firecrawl** connector (asks user to link).
+- Server function `src/lib/press.functions.ts` → `getSoleSearchPress()` calls Firecrawl `search` for queries like `"SoleSearch" sneakers India`, `"SoleSearch" Param Minhas`, `"SoleSearch" CNBC`, dedupes, returns `{title, url, source, snippet, date}[]`. Cached 1h via response headers.
+- New `PressWall.tsx` component renders inside the SoleSearch world as an interactive in-game "kiosk" — approach it to open a panel listing the articles (DM Mono headlines, source badge, click to open).
+- Falls back to a curated hardcoded list (CNBC-TV18, YourStory, etc.) if the connector isn't linked or returns nothing, so the experience never breaks.
+- Wired with TanStack Query (`useQuery` in component, not in loader — the route is public).
 
-Root cause: at chapter transitions the gate signpost sits at `(c.endCol+4)*TILE` and the autopilot sees a "gap" 1-3 tiles ahead because waterfalls render where ground tiles are temporarily missing. The autopilot then jumps repeatedly into the same gap. Also `body.x > worldRef.current.endX - TILE*2` halts movement before the player crosses the last gate, so "endReached" never fires and the guy idles forever.
+### 5. Recruiter-facing polish
+- `ChapterIntro` already shows role + bullets — feed it richer v7 outcomes ($795K raised, 350K followers, ₹1Cr revenue, etc.) so each world arrival reads like a one-line resume hit.
+- `ResumeView` rebuilt from the v7 `did/learned/matters` so the "press R" view is a clean recruiter resume with metrics, not lorem-style copy.
+- Bottom-right "world map" stays, but uses v7 chapter colors.
 
-Fixes in `Level.tsx`:
-- Replace gap detection with **safe-tile detection**: scan rows `belowRow` AND `belowRow+1` for `#`/`=`/`B` over a 4-tile lookahead. Only trigger jump when the *nearest* solid drops by >1 tile or there's no solid for 2+ tiles.
-- Add a "stuck-jump cooldown" of 30 frames so the autopilot can't fire two jumps inside one gap.
-- When stuck against a wall (`vx≈0` for >40 frames AND `onGround`), force a small `body.x += TILE` warp to unstick (rare safety net at chapter seams).
-- Change end condition: keep walking until `body.x > world.endX + TILE*4` (past the end-garden links), then stop and emit `endReached` once.
-- Engagement points: in `Level.tsx` the quick-mode auto-collect loop only fires when `nearRef.current` is set this frame. Because the autopilot sometimes runs past at high speed, raise `nearTest` range from `1.4` → `2.2` *only* when `quickRef.current` is true so banners always trigger as the player walks past coins/clippings/secrets/NPCs.
+### 6. Cleanup
+- Remove now-unused minigame triggers that don't map to the new chapter list (or keep and re-skin to chapter accent).
+- Update `src/routes/index.tsx` SEO meta to v7 title/description (already largely there).
 
-## 3. Banners overlap the nav bar
+## Tech notes
 
-The `QuickBanner` currently stacks at top-center. The world-name ribbon sits at the top — they collide. Fix:
-- Move banners to **bottom-center** on mobile (above the touch-control row, `bottom: 116px`) and **top-right under the contact pill** on desktop (`top: 96px, right: 12px`).
-- Cap to one banner at a time (already enforced via `prev.slice(-1)`), but bump duration to 2.4s in Sim and add a slide-from-side animation instead of fade so each banner reads as discrete.
-- Add a tiny world-color left bar (4px) to the banner card and the chapter index `W3 ·` prefix so multiple back-to-back banners are differentiable.
+- Sprite sheet: 32x32 cells, drawn at 2x via `ctx.imageSmoothingEnabled = false`.
+- World scene render order: sky gradient → stars/parallax bg → world-specific scenery → ground/tiles → player → particles → vignette/scanlines (matches v7).
+- Firecrawl call lives behind a `createServerFn({ method: "GET" })` in `press.functions.ts`; client uses `useServerFn` + `useQuery` with 1h `staleTime`. Never read `process.env.FIRECRAWL_API_KEY` on the client.
+- Fallback press list lives in `src/components/portfolio/pressFallback.ts` so the UI is identical whether live or fallback.
 
-## 4. World-specific scenery (the "hasn't added world elements" complaint)
+## Things I'll need from you (optional)
 
-Currently the per-chapter parallax is generic (`city`/`trees`/`shelves`). Add bespoke foreground props **drawn in `drawAmbient`** for each level so each world feels different:
+If you want to hand-draw the hero sprite yourself, drop a 4-row sprite sheet (idle/walk/jump, left+right or single facing I'll mirror) at `src/assets/player.png` — otherwise I generate it. Same for any specific brand shots/SoleSearch logos you want featured on the press wall.
 
-- **GetRightPrice** (price-tag bunting strung between poles, blinking "SALE" billboard, animated price-comparison arrows).
-- **Hab Housing** (window-lit apartment block silhouette, "FOR RENT" yard signs with palette accent, drifting paper applications).
-- **Octo / Quartic.ai** (chat-bubble particles floating up from terminals, scrolling code-line CRT in background, "LIVE" indicator dot).
-- **SoleSearch** — already has sneaker wall; add: hanging sneaker-on-laces silhouette over a streetlight, a graffiti tag spelling "SOLE", a queue of pixel-fans behind a velvet rope, "DROP TODAY" neon.
-- **Investopad** (whiteboard with sticky notes, founders coding at desks in window cutouts, cap-table chart on a screen).
-- **Cats Can Dance** (turntables on a DJ booth, equalizer bars reacting to fake bass, spinning vinyl, "ON AIR" sign, dancing cat silhouette).
-- **Iterate** (AI prompt floating windows with cycling phrases, generation grid with small images appearing and dissolving, neural-net node graph in background).
+## Out of scope (for this pass)
 
-Each world also gets a **distinct ground-tile detail pattern** (dot grid for Investopad, brick mortar for Hab, checker for GetRightPrice, etc.) by branching on `chapter.levelId` inside `drawTiles`.
-
-## 5. Mobile chapter-intro card still oversized
-
-The card has `clamp(8px..)` but on a 360px screen the chapter title row + bullets still wrap awkwardly and overflow the visible canvas because of `pr-8` plus the close button absolutely positioned. Fix:
-- Reduce card width to `min(78vw, 280px)` on mobile.
-- Anchor at `top-1 right-1` and lift it ABOVE the world-ribbon by giving it `z-30` and offsetting `top: calc(env(safe-area-inset-top) + 4px)`.
-- Move the auto-dismiss to 4.5s (was 6s) and add a 2-tap dismiss safety: backdrop click anywhere on the canvas dismisses too (forwarded via `onPointerDown` on the wrapping `<div ref={wrapRef}>`).
-- Force `text-wrap: balance` on title and `line-clamp-2` on each bullet (already applied on bullets; add to outcome).
-
-Also the **on-canvas chapter toast** (`drawChapterToast`) draws at fixed pixel `font 24px Playfair` which on a narrow 220px internal buffer overflows. Make font-size scale: `Math.min(24, W/14)` for the era and `Math.min(12, W/30)` for the W#.
-
-## 6. Resume view — recruiter-grade redesign
-
-Replace the current single-column dark stack in `ResumeView.tsx` with a structured two-column layout (collapses to one on <640px):
-
-```
-┌───────────────────────────────────────────────┐
-│  HERO                                          │
-│   PARAM MINHAS         [Email] [LinkedIn] [⎙] │
-│   Builder · Designer · Director · Producer    │
-│   2-line elevator pitch                        │
-├──────────────┬────────────────────────────────┤
-│ LEFT (1/3)   │ RIGHT (2/3)                    │
-│ • Contact    │ ─ Experience (chapters)        │
-│ • Skills     │   each row: company · role ·   │
-│   (chips,    │   years · 1-line outcome       │
-│   grouped    │   + 2-3 bullets                │
-│   by domain) │ ─ Press                        │
-│ • Tools      │ ─ Selected work links          │
-│ • Education  │                                │
-│ • Languages  │                                │
-└──────────────┴────────────────────────────────┘
-```
-
-Specific changes in `ResumeView.tsx`:
-- Add a real header band with avatar pixel-portrait (use the existing `drawPlayer` rendered to an offscreen canvas → data URL on mount, 96px square with a subtle accent border).
-- Group skills by category (Strategy / Design / Engineering / Music / AI) using an inline mapping const at top of file. Render as compact pill rows, not duplicated per chapter.
-- Each chapter renders as a compact "experience row": company name (Playfair, 18px), role + years (mono caps right-aligned), one-line outcome, 3 bullet outcomes — no big cards, no big accent bars (subtle 2px left rule per chapter).
-- Add a "Selected press" section pulling `lv.clipping.title + source` into a clean list.
-- Footer with email + LinkedIn + Twitter + site as plain inline links (not pill buttons).
-- Print stylesheet: `@media print` removes background gradient, switches body to white, ink to `#111`, hides the back-to-game CTA, uses serif headings & sans body so the printed PDF looks like a normal CV.
-- Light/dark toggle isn't necessary, but ensure default looks great on light printer paper after print rules.
-
-## Suggested extra improvements (low cost, high recruiter ROI)
-
-- **Share card / OG image**: add `og:image` URL to `routes/index.tsx` head — generate a static 1200×630 PNG once and import. Boosts LinkedIn shares.
-- **First-visit confetti on game complete** — adds polish and a clear "you finished" beat.
-- **Keyboard shortcut hints** on hover for HUD buttons (`title="Open inventory (Tab)"`).
-- **Analytics-free pageview ping** to a private endpoint so Param can see who opened the resume (deferrable; mention but don't implement now).
-- **A11y**: add `aria-label`s to icon-only buttons and `prefers-reduced-motion` guard around the parallax + scarf wave.
-
-## Files to touch
-- `src/components/portfolio/engine.ts` — round x/y on ground, slower walkAnim quantization.
-- `src/components/portfolio/Level.tsx` — fixed quick autopilot, banner repositioning, near-range bump for quick mode, end condition.
-- `src/components/portfolio/sprites.ts` — drawPlayer mirror without negative scale, drop radial glow, scaled chapter-toast font, world-specific ambient props in `drawAmbient`, per-level ground-tile patterns in `drawTiles`.
-- `src/components/portfolio/QuickBanner.tsx` — bottom-mobile / top-right-desktop positioning, slide animation, world chip.
-- `src/components/portfolio/ChapterIntro.tsx` — narrower mobile card, z-30, safe-area top, 4.5s timer, line-clamp on outcome.
-- `src/components/portfolio/ResumeView.tsx` — full redesign per layout above + print stylesheet + grouped skills.
-- `src/components/PixelPortfolio.tsx` — pass canvas-dismiss handler to ChapterIntro; keep banner state cap.
-- `src/components/portfolio/Lighting.ts` — drop `drawPlayerGlow` (or keep but unused).
-- `src/routes/index.tsx` — add `og:image` meta.
-
-No data file changes; recruiter copy is unchanged.
+- Save-progress to Lovable Cloud
+- Sound toggle / music
+- Leaderboard / share-your-run links
