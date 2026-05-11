@@ -17,6 +17,7 @@ export function Hud({
   nextUnlockXp,
   nextUnlockLabel,
   hardUnlocked,
+  onCliffNotes,
 }: {
   chapter: Chapter | null;
   coins: number;
@@ -90,7 +91,6 @@ export function TitleScreen({
   onClose?: () => void;
   showClose?: boolean;
   hardUnlocked?: boolean;
-  onCliffNotes: () => void;
 }) {
   return (
     <div
