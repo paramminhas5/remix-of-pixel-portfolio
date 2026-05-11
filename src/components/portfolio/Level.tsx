@@ -43,6 +43,8 @@ import {
 import { sfx } from "./audio";
 import { Emitter, weatherForChapter } from "./Particles";
 import { drawVignette } from "./Lighting";
+import { drawWorldScenes } from "./worldScenes";
+import { drawPlayerSprite, spriteReady } from "./playerSprite";
 
 export type LevelEvent =
   | { kind: "coin"; levelId: string; index: number; skill: string }
@@ -500,6 +502,24 @@ export function LevelView({
       drawMountains(ctx, W, VIEW_H, camX, palette);
       drawParallax(ctx, W, VIEW_H, camX, palette, ac.parallax, t);
       drawAmbient(ctx, W, VIEW_H, camX, t, ac.levelId, palette);
+
+      // Per-chapter set pieces (CRT monitors, shoe shelves, vinyl, etc.)
+      drawWorldScenes(
+        ctx,
+        W,
+        VIEW_H,
+        camX,
+        t,
+        worldRef.current.chapters.map((c) => ({
+          levelId: c.levelId,
+          startCol: c.startCol,
+          endCol: c.endCol,
+          accent: c.palette.accent,
+        })),
+        body.x,
+        body.vx,
+        Math.abs(body.vx) > 0.5,
+      );
 
       // Chapter-specific flair
       if (ac.levelId === "home" || ac.levelId === "origin") drawBalloon(ctx, W, VIEW_H, t, palette.accent);
