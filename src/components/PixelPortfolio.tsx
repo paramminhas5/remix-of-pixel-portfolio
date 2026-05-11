@@ -98,7 +98,7 @@ export default function PixelPortfolio() {
 
   const handleRef = useRef<LevelHandle | null>(null);
 
-  const overlayOpen = !!(npcOpen || clipOpen || secretOpen || minigameOpen || invOpen || cliffOpen);
+  const overlayOpen = !!(npcOpen || clipOpen || secretOpen || minigameOpen || invOpen || cliffOpen || pressOpen);
   useEffect(() => {
     handleRef.current?.pauseInputs(overlayOpen);
   }, [overlayOpen]);
