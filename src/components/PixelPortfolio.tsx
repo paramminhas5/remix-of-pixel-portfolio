@@ -302,6 +302,17 @@ export default function PixelPortfolio() {
           </button>
         </div>
 
+        {/* SoleSearch press wall trigger — only visible on the SoleSearch chapter */}
+        {activeChapter?.levelId === "sole" && (
+          <button
+            onClick={() => setPressOpen(true)}
+            className="pointer-events-auto absolute left-2 top-2 z-10 rounded-md border-2 border-[#ff006e] bg-black/70 px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-[#ff9fd4] shadow-lg backdrop-blur hover:bg-[#ff006e]/15 sm:left-4 sm:top-4 sm:text-[11px] animate-pulse"
+            style={{ animationDuration: "2.4s" }}
+          >
+            📰 Press Wall [P]
+          </button>
+        )}
+
         {/* HUD overlay: bottom bar. On mobile, pad bottom so touch controls
             (Jump button is ~72px tall + 12px inset) don't overlap. */}
         <div className="pointer-events-none absolute left-0 right-0 bottom-0 z-10 flex flex-col gap-2 p-2 pb-[100px] sm:p-4 sm:pb-4">
