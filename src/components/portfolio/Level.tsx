@@ -288,6 +288,7 @@ export function LevelView({
       raf = requestAnimationFrame(loop);
     };
     const runFrame = (now: number) => {
+      ctx.imageSmoothingEnabled = false;
       const dtSec = (now - last) / 1000;
       last = now;
       const world = worldRef.current;
