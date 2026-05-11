@@ -152,16 +152,19 @@ function drawGRP(s: SceneCtx) {
     ctx.fillStyle = "#999"; ctx.fillRect(mx + 32, my - 14, 16, 16);
     ctx.fillStyle = "#7a7a60"; ctx.fillRect(mx + 7, my + 10, 66, 15);
   }
-  // Floating price tags drifting up
-  ["₹999", "COMPARE", "BEST!", "₹1,499", "DEAL!", "SAVE!"].forEach((tag, i) => {
+  // Floating price tags drifting up — small text, padded box, never overflows
+  ["₹999", "COMPARE", "BEST", "₹1499", "DEAL", "SAVE"].forEach((tag, i) => {
     const wx = startX + 100 + i * 235;
     const tx = wx - camX;
     if (tx < -140 || tx > W + 140) return;
     const ty = groundY - 195 + Math.sin(t * 1.3 + i) * 22;
-    ctx.strokeStyle = accent + "66"; ctx.lineWidth = 1.5; ctx.strokeRect(tx, ty - 18, 80, 26);
-    ctx.fillStyle = accent + "22"; ctx.fillRect(tx, ty - 18, 80, 26);
-    ctx.fillStyle = accent; ctx.font = "10px 'DM Mono', monospace"; ctx.textAlign = "left";
-    ctx.fillText(tag, tx + 10, ty + 3);
+    const bw = 56, bh = 18;
+    ctx.strokeStyle = accent + "66"; ctx.lineWidth = 1; ctx.strokeRect(tx, ty - bh, bw, bh);
+    ctx.fillStyle = accent + "22"; ctx.fillRect(tx, ty - bh, bw, bh);
+    ctx.fillStyle = accent; ctx.font = "6px 'DM Mono', monospace";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(tag, tx + bw / 2, ty - bh / 2);
+    ctx.textBaseline = "alphabetic";
   });
 }
 
