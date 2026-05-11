@@ -1,59 +1,93 @@
-## Goal
+# Final Polish Pass
 
-Bring the React pixel-portfolio up to (and beyond) the v7 HTML reference: a brand-new player character, all 8 chapters with the v7 copy, world-specific set pieces that actually tell the story to recruiters, SoleSearch as the largest, richest world with live-fetched press articles, and a visual bar set by the reference pixel-art screenshots.
+Goal: ship a brilliant, recruiter-ready run with clean chapter transitions, balanced world sizes, and zero jitter.
 
-## What changes
+## 1. Chapter sizing rebalance (`data.ts`)
 
-### 1. New player character
-- Generate a transparent pixel-art sprite sheet (idle 2-frame, walk 4-frame, jump 1-frame, both facings) saved to `src/assets/player.png`.
-- Add a `Player.tsx` renderer in `portfolio/` that draws from the sheet (image-rendered: pixelated) and falls back to a hand-drawn polished pixel character (multi-tone hair, jacket, sneakers, animated bob — same style family as the reference image) if the sprite fails to load.
-- Replace current player draw call inside `engine.ts` / `Level.tsx` with the new component.
+Make SoleSearch the clear hero, keep others tight. Widths in tiles:
 
-### 2. Port v7 chapter data
-Rewrite `src/components/portfolio/data.ts` to match the 8 chapters from `param-portfolio-v7.html`:
-Origin (Bengaluru) · GetRightPrice · Hab Housing · AI/Octo · Investopad · **SoleSearch** · Cats Can Dance · Iterate.
-- Each chapter gets `did / learned / matters` long-form text, era label, accent color, and the v7 tag list — wired into `ChapterIntro`, `CliffNotes`, `ResumeView`, `Cards`, the dialog box.
-- SoleSearch chapter gets ~2x the world width and ~2x the hotspots/coins/NPCs of other worlds (so it's clearly the largest beat).
+```text
+origin       → 60   (was ~80)
+grp          → 55
+hab          → 55
+ai           → 55   (Octo + Investopad combined; AI-era resume hits)
+sole         → 160  (~3x neighbours; biggest map, most coins/NPCs/hotspots)
+ccd          → 70   (Cats Can Dance — music label + pet culture only)
+iterate      → 70   (separate chapter — AI-led marketing agency)
+```
 
-### 3. Per-world scenery (port + push beyond)
-New `worldScenes.ts` module with one render function per chapter, called from `Level.tsx` as a parallax layer behind the tile grid. Each scene ports the v7 set pieces and adds a second parallax band + lighting pass aiming at the reference screenshots:
-- **Origin**: Bengaluru rooftop — stacked apartment silhouettes, water tank, clothesline, pulsing moon labelled "Bengaluru, India".
-- **GetRightPrice**: internet café — animated CRT monitors running price-comparison text, floating ₹ price tags.
-- **Hab Housing**: rental towers with lit/unlit windows, "FOR RENT" signs, autos driving across screen, street lamps.
-- **AI/Octo + Investopad**: server racks with blinking LEDs + VU bars, data streams matching player velocity, floating chat bubbles.
-- **SoleSearch (centerpiece)**: 7 shoe shelves (shoes bounce when player nears), neon DRIP/HYPE/CULTURE/AUTHENTIC signs, stage with Rannvijay silhouette, streetwear rack swaying, plus a new "press wall" zone that shows the live-fetched articles.
-- **Cats Can Dance**: rotating vinyl records, three cats that drift toward the player, mixing desk with VU meters, sound wave across the floor, music-note particles.
-- **Iterate**: AI grid, data bars that pulse to walk speed, floating AI-term cards.
+Reposition coins/NPCs/hotspots to fit new ranges. Update `worldStitch.ts` chapter offsets.
 
-### 4. SoleSearch live press wall
-- Enable the **Firecrawl** connector (asks user to link).
-- Server function `src/lib/press.functions.ts` → `getSoleSearchPress()` calls Firecrawl `search` for queries like `"SoleSearch" sneakers India`, `"SoleSearch" Param Minhas`, `"SoleSearch" CNBC`, dedupes, returns `{title, url, source, snippet, date}[]`. Cached 1h via response headers.
-- New `PressWall.tsx` component renders inside the SoleSearch world as an interactive in-game "kiosk" — approach it to open a panel listing the articles (DM Mono headlines, source badge, click to open).
-- Falls back to a curated hardcoded list (CNBC-TV18, YourStory, etc.) if the connector isn't linked or returns nothing, so the experience never breaks.
-- Wired with TanStack Query (`useQuery` in component, not in loader — the route is public).
+## 2. Split CCD and Iterate
 
-### 5. Recruiter-facing polish
-- `ChapterIntro` already shows role + bullets — feed it richer v7 outcomes ($795K raised, 350K followers, ₹1Cr revenue, etc.) so each world arrival reads like a one-line resume hit.
-- `ResumeView` rebuilt from the v7 `did/learned/matters` so the "press R" view is a clean recruiter resume with metrics, not lorem-style copy.
-- Bottom-right "world map" stays, but uses v7 chapter colors.
+Currently `drawCCD` covers both. Split into two renderers:
 
-### 6. Cleanup
-- Remove now-unused minigame triggers that don't map to the new chapter list (or keep and re-skin to chapter accent).
-- Update `src/routes/index.tsx` SEO meta to v7 title/description (already largely there).
+- **`drawCCD`** — Cats Can Dance: vinyl records, mixing desk, drifting cats, VU meters, "PET CULTURE" + "MUSIC LABEL" neon. Warm orange wash.
+- **`drawIterate`** — AI-led marketing agency: clean grid, pulsing data bars, campaign dashboards, "AI MARKETING" / "ITERATE.AGENCY" signage, brand-logo silhouettes on a wall. Cool cyan/violet wash.
 
-## Tech notes
+Update `RENDERERS` map and `data.ts` chapter copy (`did/learned/matters`) to reflect each business correctly.
 
-- Sprite sheet: 32x32 cells, drawn at 2x via `ctx.imageSmoothingEnabled = false`.
-- World scene render order: sky gradient → stars/parallax bg → world-specific scenery → ground/tiles → player → particles → vignette/scanlines (matches v7).
-- Firecrawl call lives behind a `createServerFn({ method: "GET" })` in `press.functions.ts`; client uses `useServerFn` + `useQuery` with 1h `staleTime`. Never read `process.env.FIRECRAWL_API_KEY` on the client.
-- Fallback press list lives in `src/components/portfolio/pressFallback.ts` so the UI is identical whether live or fallback.
+## 3. Visible chapter transitions
 
-## Things I'll need from you (optional)
+Port the v7 HTML "world swap" feel:
 
-If you want to hand-draw the hero sprite yourself, drop a 4-row sprite sheet (idle/walk/jump, left+right or single facing I'll mirror) at `src/assets/player.png` — otherwise I generate it. Same for any specific brand shots/SoleSearch logos you want featured on the press wall.
+- **`ChapterTransition.tsx`** overlay: when player crosses a chapter border, fade a full-screen wash in the new accent color (300ms in, 500ms hold, 600ms out) with the chapter title + era pixel-stamped center-screen, then dissolve.
+- Drive from `PixelPortfolio.tsx` by watching `currentChapterId`.
+- Background music/ambient color in `Lighting.ts` cross-fades to the new accent over 800ms so the world visibly changes (sky tint, fog color, particle hue).
 
-## Out of scope (for this pass)
+## 4. Sprite jitter fix
 
-- Save-progress to Lovable Cloud
-- Sound toggle / music
-- Leaderboard / share-your-run links
+Root cause: `playerSprite.ts` draws at fractional canvas pixels because `player.x` is a float and we don't snap.
+
+Fixes in `engine.ts` + `playerSprite.ts`:
+
+- `Math.round(player.x - camX)` and `Math.round(player.y)` before `drawImage`.
+- Lock animation frame to `Math.floor(t * 8) % frameCount` (was using float-derived index).
+- Set `ctx.imageSmoothingEnabled = false` once at canvas init, not per-frame.
+- Camera: `camX = Math.round(camX)` after lerp.
+
+## 5. Generated sprite sheets
+
+Use `imagegen--generate_image` (premium, transparent_background) then crop with a Python script into uniform cells. Save under `src/assets/`:
+
+- **`sneakers-sheet.png`** — 8 sneakers, 32×32 cells, side profile, varied colorways (Jordan-ish, runner, hi-top, slip-on, chunky, classic, racing, boot). Replace the procedural shoes on the SoleSearch shelves.
+- **`cats-sheet.png`** — 4 cats × 2 frames (idle/walk), 32×32 cells, pixel-art, varied fur (orange tabby, black, calico, grey). Replace procedural cats in CCD.
+
+Both load via small helpers mirroring `playerSprite.ts` with code-drawn fallback.
+
+## 6. Sneaker wall sizing
+
+In `drawSole`, current wall has 7 shelves of large 46×23 shoes — visually overwhelming and clips the player. Reduce to:
+
+- **5 shelves** (was 7), spaced 44px apart (was 40)
+- Shoe cell **28×18** (was 46×23), one shoe per 70px (was 100)
+- Move shelves into the back third of the chapter band only, not full width — leaves room for stage, streetwear rack, press wall.
+- Press kiosk + Rannvijay stage + streetwear rack stay; reflow positions.
+
+## 7. Recruiter copy refresh
+
+Update `data.ts` `did/learned/matters` for the now-separate Iterate chapter and corrected CCD chapter:
+
+- **CCD**: "Built India's first cat-focused music label + pet culture brand. 350K followers, brand deals with [X], live events."
+- **Iterate**: "Founded AI-led marketing agency. ₹1Cr+ revenue, [N] brands shipped, AI workflows for [domain]."
+
+(I'll pull exact numbers from the v7 HTML.)
+
+## 8. QA pass
+
+- Walk the full level end-to-end via the engine, log chapter entries.
+- Verify each chapter renders, transition fires, sprite is rock-steady at all speeds.
+- Verify SoleSearch press wall live-fetches (Firecrawl) with fallback.
+- Confirm no z-order glitches between scenes / tiles / player.
+
+## Out of scope
+
+- New audio tracks (existing audio.ts ambient stays).
+- Save progress / leaderboard.
+- Anything not visible to a recruiter on a single playthrough.
+
+## Optional from you
+
+- Confirm exact CCD brand/numbers (label name, follower count) and Iterate revenue/brand list — otherwise I'll lift directly from the v7 HTML.
+
+Approve and I'll execute end-to-end and stop only after the QA walkthrough is clean.

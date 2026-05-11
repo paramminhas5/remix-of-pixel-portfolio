@@ -13,6 +13,7 @@ import { ClippingCard, SecretCard } from "./portfolio/Cards";
 import { TouchControls } from "./portfolio/EndScreen";
 import { Minigame } from "./portfolio/Minigames";
 import { ChapterIntro } from "./portfolio/ChapterIntro";
+import { ChapterFlash } from "./portfolio/ChapterFlash";
 import { CliffNotes } from "./portfolio/CliffNotes";
 import { SkillTree, getSkillIcon } from "./portfolio/SkillTree";
 import { ResumeView } from "./portfolio/ResumeView";
@@ -281,6 +282,8 @@ export default function PixelPortfolio() {
         {introLevel && (
           <ChapterIntro level={introLevel} onDismiss={() => setIntroLevel(null)} />
         )}
+
+        <ChapterFlash chapter={activeChapter} />
 
         {/* Top-right contact pill — always visible for recruiters.
             On mobile, Resume + Contact stack tightly; on desktop side-by-side. */}
