@@ -144,6 +144,19 @@ export function ResumeView({ onBackToGame }: { onBackToGame: () => void }) {
           </div>
         </header>
 
+        {/* HIGHLIGHTS — recruiter-friendly stat strip */}
+        <section className="resume-card mb-10">
+          <SectionHeading>Highlights</SectionHeading>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {HIGHLIGHTS.map((h) => (
+              <div key={h.label} className="rounded border border-black/15 bg-white p-3">
+                <div className="resume-serif text-2xl font-bold leading-none text-black">{h.stat}</div>
+                <div className="resume-mono mt-1 text-[10px] uppercase tracking-widest text-black/55">{h.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* TWO-COLUMN BODY */}
         <div className="grid gap-10 sm:grid-cols-3">
           {/* LEFT — Skills, Tools, Education */}
