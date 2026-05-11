@@ -463,18 +463,53 @@ function drawCCD(s: SceneCtx) {
     if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   }
   ctx.stroke();
-  // Iterate AI grid + data bars in the back third
-  const itStart = startX + (endX - startX) * 0.55;
-  if (s.playerX > itStart - 200) {
-    for (let i = 0; i < 12; i++) {
-      const wx = itStart + i * 130;
-      const bx2 = wx - camX * 0.5;
-      if (bx2 < -20 || bx2 > W + 20) continue;
-      const dh = 20 + Math.abs(Math.sin(t * 1.5 + i)) * 100 + (s.walking ? Math.abs(Math.sin(t * 8 + i)) * 30 : 0);
-      ctx.fillStyle = "#ffd70044"; ctx.fillRect(bx2 - 6, groundY - dh, 12, dh);
-      ctx.fillStyle = "#ffd70099"; ctx.fillRect(bx2 - 6, groundY - dh, 12, 3);
-    }
+}
+
+// ─── ITERATE — AI marketing agency: grid, bars, brand walls ─────
+function drawIterate(s: SceneCtx) {
+  const { ctx, W, H, camX, t, groundY, startX, endX, accent, playerVx, walking } = s;
+  // Cool wash
+  ctx.fillStyle = "#7ce0ff08"; ctx.fillRect(0, 0, W, H);
+  // Energy grid
+  const gridA = 0.06 + Math.abs(playerVx) * 0.005;
+  ctx.strokeStyle = `rgba(124,224,255,${Math.min(0.22, gridA)})`;
+  ctx.lineWidth = 1; const gs = 36;
+  for (let x = (startX - camX) % gs; x < W; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  // Brand-wall silhouettes — abstract logo blocks on the back wall
+  const brandColors = ["#ff006e", "#7ce0ff", "#ffd700", "#a78bfa", "#2ecc71", "#ff8c00"];
+  const span = endX - startX;
+  for (let i = 0; i < 8; i++) {
+    const wx = startX + 60 + i * (span / 8);
+    const bx = wx - camX * 0.5;
+    if (bx < -100 || bx > W + 100) continue;
+    const c = brandColors[i % brandColors.length];
+    ctx.fillStyle = "#0a1628"; ctx.fillRect(bx, groundY - 200, 80, 60);
+    ctx.fillStyle = c + "aa"; ctx.fillRect(bx + 8, groundY - 192, 64, 8);
+    ctx.fillStyle = c + "55"; ctx.fillRect(bx + 8, groundY - 178, 40, 5);
+    ctx.fillRect(bx + 8, groundY - 168, 50, 5);
+    ctx.fillRect(bx + 8, groundY - 158, 30, 5);
   }
+  // Pulsing data bars (campaign metrics)
+  const barCount = Math.floor(span / 70);
+  for (let i = 0; i < barCount; i++) {
+    const wx = startX + 40 + i * 70;
+    const bx2 = wx - camX;
+    if (bx2 < -20 || bx2 > W + 20) continue;
+    const dh = 20 + Math.abs(Math.sin(t * 1.5 + i)) * 90 + (walking ? Math.abs(Math.sin(t * 8 + i)) * 24 : 0);
+    ctx.fillStyle = accent + "55"; ctx.fillRect(bx2 - 5, groundY - dh, 10, dh);
+    ctx.fillStyle = accent; ctx.fillRect(bx2 - 5, groundY - dh, 10, 3);
+  }
+  // Signage
+  ctx.save();
+  ctx.shadowBlur = 18; ctx.shadowColor = accent;
+  ctx.fillStyle = accent;
+  ctx.font = "bold 14px 'Press Start 2P', monospace"; ctx.textAlign = "left";
+  const sx = startX + 80 - camX * 0.6;
+  if (sx > -300 && sx < W + 300) ctx.fillText("ITERATE.AGENCY", sx, groundY - 250);
+  const sx2 = startX + span * 0.55 - camX * 0.6;
+  if (sx2 > -300 && sx2 < W + 300) ctx.fillText("AI · MARKETING", sx2, groundY - 240);
+  ctx.restore();
 }
 
 const RENDERERS: Record<string, (s: SceneCtx) => void> = {
@@ -485,6 +520,7 @@ const RENDERERS: Record<string, (s: SceneCtx) => void> = {
   investopad: drawAI,
   sole: drawSole,
   ccd: drawCCD,
+  iterate: drawIterate,
   home: drawOrigin,
 };
 
