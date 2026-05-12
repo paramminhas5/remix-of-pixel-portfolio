@@ -346,6 +346,12 @@ export default function PixelPortfolio() {
           >
             📄 Resume
           </button>
+          <button
+            onClick={() => setCliffOpen(true)}
+            className="pointer-events-auto rounded-full border border-white/30 bg-black/60 px-2.5 py-1 font-mono text-[9px] uppercase tracking-widest text-white/80 shadow-lg backdrop-blur hover:bg-white/10 sm:px-3 sm:text-[10px]"
+          >
+            📋 Cliff Notes
+          </button>
         </div>
 
         {/* SoleSearch press wall trigger — only visible on the SoleSearch chapter */}

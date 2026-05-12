@@ -259,7 +259,7 @@ const HAB: Level = {
 
 // ─── AI / OCTO / QUARTIC (45w) ─────────────────────────────────
 const AI: Level = {
-  id: "ai", index: 4, name: "AI Era",
+  id: "ai", index: 4, name: "Early AI Era",
   era: "2013-17 · Octo → Quartic.ai",
   blurb: "Built India's first AI chatbot (2013). Co-built Octo — an AI marketing platform. Acquired by Quartic.ai.",
   story: "2013: Built one of India's first AI chatbots.\nOCTO: Built the AI marketing platform on top of it with Akshaya Aron.\nQUARTIC.AI: Octo was acquired. Led marketing as Director.",

@@ -122,11 +122,11 @@ export function setEngineMode(mode: "easy" | "hard" | "quick") {
     TUNING.JUMP_MIN = 11;
     TUNING.JUMP_MAX = 12;
     TUNING.DOUBLE_JUMP_VY = -9.5;
-    TUNING.WALK_MAX = 5.4;
-    TUNING.RUN_MAX = 7.4;
-    TUNING.WALK_ACCEL = 1.1;
-    TUNING.RUN_ACCEL = 1.4;
-    TUNING.FRICTION = 0.86;
+    TUNING.WALK_MAX = 6.0;
+    TUNING.RUN_MAX = 8.0;
+    TUNING.WALK_ACCEL = 1.3;
+    TUNING.RUN_ACCEL = 1.6;
+    TUNING.FRICTION = 0.88;
     TUNING.REQUIRE_CHARGE = false;
     TUNING.EASY_AUTOPILOT = true;
   } else {
@@ -316,7 +316,9 @@ function resolveAxis(body: Body, world: TileWorld, axis: "x" | "y") {
 export function cameraX(playerX: number, viewW: number, world: TileWorld) {
   let cx = playerX - viewW / 2;
   cx = Math.max(0, Math.min(cx, world.widthPx - viewW));
-  return Math.round(cx);
+  // Floor (not round) so sub-pixel player motion doesn't snap the camera
+  // back-and-forth a full pixel each frame — that snap was the visible jitter.
+  return Math.floor(cx);
 }
 
 export function overlap(

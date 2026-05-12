@@ -28,8 +28,8 @@ const SKILL_GROUPS: { label: string; skills: string[] }[] = [
 const TOOLS = ["Figma", "Cursor", "Claude / GPT", "TypeScript", "React", "Node", "Postgres", "Ableton Live", "Logic Pro", "Notion"];
 
 const HIGHLIGHTS: { stat: string; label: string }[] = [
+  { stat: "₹26cr+", label: "SoleSearch yearly sales" },
   { stat: "$795K", label: "Raised (SoleSearch)" },
-  { stat: "₹1cr+", label: "Live event sales" },
   { stat: "₹1cr+", label: "Sponsorships closed" },
   { stat: "30+", label: "Live events produced" },
   { stat: "350K+", label: "Community followers" },

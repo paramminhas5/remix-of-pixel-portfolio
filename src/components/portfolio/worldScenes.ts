@@ -414,8 +414,9 @@ function drawSole(s: SceneCtx) {
     ctx.fillRect(mx - 9, groundY - 50, 18, 14);
     ctx.fillStyle = "#fff4"; ctx.fillRect(mx - 7, groundY - 47, 4, 4);
   });
-  // Press kiosk (newsstand) — interaction lives here. Tall + readable.
-  const kx = startX + span * 0.78 - camX;
+  // Press kiosk (newsstand) — sits in the open stretch between NPCs at
+  // gx≈32 and gx≈48 so it doesn't stack on top of the lower-path characters.
+  const kx = startX + span * 0.55 - camX;
   if (kx > -120 && kx < W + 160) {
     // Stand
     ctx.fillStyle = "#3a0a28"; ctx.fillRect(kx, groundY - 64, 64, 64);
@@ -437,7 +438,7 @@ function drawSole(s: SceneCtx) {
     ctx.textAlign = "center"; ctx.fillText("PRESS", kx + 32, groundY - 81);
     ctx.restore();
     // Hint when player nearby
-    const wx = startX + span * 0.78;
+    const wx = startX + span * 0.55;
     if (Math.abs(playerX - wx) < 80) {
       ctx.fillStyle = "#fff"; ctx.font = "7px 'DM Mono', monospace";
       ctx.textAlign = "center";

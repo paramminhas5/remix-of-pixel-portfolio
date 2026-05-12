@@ -457,49 +457,75 @@ const PORTRAIT_EMOJI: Record<string, string> = {
 
 function PeopleCards({ quotes }: { quotes: { levelId: string; name: string; quote: string }[] }) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  // Group by world, in LEVELS order
+  const byLevel = new Map<string, typeof quotes>();
+  for (const q of quotes) {
+    if (!byLevel.has(q.levelId)) byLevel.set(q.levelId, []);
+    byLevel.get(q.levelId)!.push(q);
+  }
+  const groups = LEVELS.filter((l) => byLevel.has(l.id)).map((l) => ({
+    level: l,
+    people: byLevel.get(l.id)!,
+  }));
+  let runningIdx = 0;
   return (
-    <div className="space-y-2">
-      {quotes.map((q, i) => {
-        const lv = LEVELS.find((l) => l.id === q.levelId)!;
-        // Find the full NPC data for portrait
-        const npcData = lv?.npcs.find((n) => n.name === q.name);
-        const emoji = PORTRAIT_EMOJI[npcData?.portrait ?? "founder"] ?? "🧑‍💻";
-        const isOpen = openIdx === i;
-        return (
+    <div className="space-y-4">
+      {groups.map(({ level: lv, people }) => (
+        <div key={lv.id}>
           <div
-            key={i}
-            className="rounded-lg border overflow-hidden transition-all"
-            style={{ borderColor: isOpen ? lv.palette.accent : `${lv.palette.accent}50` }}
+            className="mb-2 flex items-baseline gap-2 border-b pb-1"
+            style={{ borderColor: `${lv.palette.accent}50` }}
           >
-            <button
-              className="w-full flex items-center gap-3 p-3 text-left hover:bg-white/5 transition"
-              onClick={() => setOpenIdx(isOpen ? null : i)}
-            >
-              <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-lg"
-                style={{ borderColor: lv.palette.accent, background: `${lv.palette.accent}15` }}
-              >
-                {emoji}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-bold text-white leading-tight">{q.name}</div>
-                <div className="font-mono text-[10px] text-white/50" style={{ color: lv.palette.accentDim }}>
-                  {npcData?.role ?? lv.era}
-                </div>
-              </div>
-              <span className="shrink-0 font-mono text-[10px] text-white/30 transition-transform" style={{ transform: isOpen ? "rotate(90deg)" : "none" }}>▶</span>
-            </button>
-            {isOpen && (
-              <div
-                className="border-t px-4 py-3 text-sm leading-relaxed text-white/80 italic"
-                style={{ borderColor: `${lv.palette.accent}40` }}
-              >
-                "{q.quote}"
-              </div>
-            )}
+            <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: lv.palette.accent }}>
+              W{lv.index}
+            </span>
+            <span className="text-xs font-bold text-white">{lv.name}</span>
+            <span className="font-mono text-[9px] text-white/40">{people.length}</span>
           </div>
-        );
-      })}
+          <div className="space-y-2">
+            {people.map((q) => {
+              const i = runningIdx++;
+              const npcData = lv.npcs.find((n) => n.name === q.name);
+              const emoji = PORTRAIT_EMOJI[npcData?.portrait ?? "founder"] ?? "🧑‍💻";
+              const isOpen = openIdx === i;
+              return (
+                <div
+                  key={i}
+                  className="rounded-lg border overflow-hidden transition-all"
+                  style={{ borderColor: isOpen ? lv.palette.accent : `${lv.palette.accent}50` }}
+                >
+                  <button
+                    className="w-full flex items-center gap-3 p-3 text-left hover:bg-white/5 transition"
+                    onClick={() => setOpenIdx(isOpen ? null : i)}
+                  >
+                    <div
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-lg"
+                      style={{ borderColor: lv.palette.accent, background: `${lv.palette.accent}15` }}
+                    >
+                      {emoji}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-bold text-white leading-tight">{q.name}</div>
+                      <div className="font-mono text-[10px] text-white/50" style={{ color: lv.palette.accentDim }}>
+                        {npcData?.role ?? lv.era}
+                      </div>
+                    </div>
+                    <span className="shrink-0 font-mono text-[10px] text-white/30 transition-transform" style={{ transform: isOpen ? "rotate(90deg)" : "none" }}>▶</span>
+                  </button>
+                  {isOpen && (
+                    <div
+                      className="border-t px-4 py-3 text-sm leading-relaxed text-white/80 italic"
+                      style={{ borderColor: `${lv.palette.accent}40` }}
+                    >
+                      "{q.quote}"
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
