@@ -422,7 +422,7 @@ export function Inventory({
         <Section title="Worlds" accent="#ffffff">
           <div className="grid gap-2 sm:grid-cols-2">
             {LEVELS.map((l) => {
-              const p = progress[l.id];
+              const p = progress[l.id] ?? { cleared: false, coins: 0, npcs: 0, clipping: false, secret: false, minigame: false };
               return (
                 <button
                   key={l.id}
