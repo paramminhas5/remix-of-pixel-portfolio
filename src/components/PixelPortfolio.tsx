@@ -54,11 +54,16 @@ const QUOTES_KEY = "ppfolio.quotes.v1";
 const CLEARED_KEY = "ppfolio.cleared.v1";
 
 function loadProgress(): import("./portfolio/WorldMap").Progress {
+  const base = emptyProgress();
   try {
     const raw = localStorage.getItem(PROGRESS_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Merge so newly-added levels always have an entry
+      return { ...base, ...parsed };
+    }
   } catch {}
-  return emptyProgress();
+  return base;
 }
 function saveProgress(p: import("./portfolio/WorldMap").Progress) {
   try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(p)); } catch {}
