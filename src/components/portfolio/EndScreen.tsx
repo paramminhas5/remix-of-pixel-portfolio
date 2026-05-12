@@ -203,7 +203,7 @@ export function TouchControls({
   onInteract: () => void;
 }) {
   const btn =
-    "select-none touch-manipulation rounded-full border-2 border-white/50 bg-black/65 backdrop-blur font-mono text-white shadow-2xl active:bg-white/30 active:scale-95 transition-transform";
+    "select-none touch-manipulation rounded-full border-2 border-white/50 bg-black/65 backdrop-blur font-mono text-white shadow-2xl active:bg-white/30 active:scale-90 transition duration-75";
   const stop = (e: React.PointerEvent) => { e.preventDefault(); (e.target as Element).releasePointerCapture?.(e.pointerId); };
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-2 z-30 flex items-end justify-between px-3 sm:hidden" style={{ touchAction: "none" }}>
