@@ -56,7 +56,7 @@ export function WorldMap({
           PARAM.exe
         </div>
         {LEVELS.map((l, i) => {
-          const p = progress[l.id];
+          const p = progress[l.id] ?? { cleared: false, coins: 0, npcs: 0, clipping: false, secret: false, minigame: false };
           const active = activeLevelId === l.id;
           const allCoins = p.coins >= l.coins.length && l.coins.length > 0;
           const icon = CHAPTER_ICON[l.id] ?? String(l.index);
