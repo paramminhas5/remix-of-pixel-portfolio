@@ -501,7 +501,7 @@ const FERE: Level = {
   cumulativeSkillsAtClear: ["Vision", "Operations", "Bootstrapping", "Conversational AI", "B2B marketing", "Capital strategy", "CEO", "Fundraising", "Brand building", "Music production"],
 };
 
-// ─── ITERATE (70w · destination · final chapter) ─────────────
+// ─── ITERATE (50w · destination · final chapter) ─────────────
 const ITERATE: Level = {
   id: "iterate", index: 9, name: "Iterate",
   era: "Now · AI-native Marketing Agency",
@@ -518,26 +518,26 @@ const ITERATE: Level = {
   metrics: { role: "Founder · Iterate", years: "Now",
     outcome: "AI-native marketing agency. Speed × strategy × creativity.",
     bullets: ["AI workflows for brand & growth", "Strategy + creative + tech in one room", "Built on 15 years of operator instinct"] },
-  map: buildMap({ width: 70, spawn: 2, npcGxs: [5, 20, 36, 52, 62], qBlock: 14, minigame: 44, secret: 58,
-    coinTopGxs: [9, 16, 24, 32, 40, 48, 56, 64],
-    coinMidGxs: [13, 22, 30, 38, 46, 54, 60, 66],
-    platforms: [[7, 5], [20, 5], [34, 5], [48, 5], [60, 5]], flagAt: 68 }),
+  map: buildMap({ width: 50, spawn: 2, npcGxs: [5, 18, 30, 40, 46], qBlock: 14, minigame: 32, secret: 44,
+    coinTopGxs: [9, 18, 28, 42],
+    coinMidGxs: [13, 22, 34, 46],
+    platforms: [[7, 5], [20, 5], [34, 5], [42, 5]], flagAt: 48 }),
   coins: [
-    { gx: 9, gy: 3, skill: "AI-powered marketing" }, { gx: 20, gy: 3, skill: "Brand systems" },
-    { gx: 30, gy: 3, skill: "Growth engineering" }, { gx: 42, gy: 3, skill: "Founder coaching" },
-    { gx: 14, gy: 7, skill: "Prompt strategy" }, { gx: 26, gy: 7, skill: "Taste-as-strategy" },
-    { gx: 36, gy: 7, skill: "Speed × craft" },
+    { gx: 9, gy: 3, skill: "AI-powered marketing" }, { gx: 18, gy: 3, skill: "Brand systems" },
+    { gx: 28, gy: 3, skill: "Growth engineering" }, { gx: 42, gy: 3, skill: "Founder coaching" },
+    { gx: 13, gy: 7, skill: "Prompt strategy" }, { gx: 22, gy: 7, skill: "Taste-as-strategy" },
+    { gx: 34, gy: 7, skill: "Speed × craft" },
   ],
   npcs: [
     { gx: 5, gy: 9, name: "Iterate", role: "Founder · AI-native marketing agency", portrait: "engineer", hue: 200, beat: "did",
       quote: "An AI-native marketing agency built on 15 years of operating across brand, technology, and growth.\n\nStrategy, creative, and technology in one room — moving at the speed of AI." },
-    { gx: 20, gy: 9, name: "How Iterate works", role: "Strategy + creative + tech", portrait: "client", hue: 210, beat: "did",
+    { gx: 18, gy: 9, name: "How Iterate works", role: "Strategy + creative + tech", portrait: "client", hue: 210, beat: "did",
       quote: "AI workflows where they make the work better, not cheaper.\n\nFor founders who want a partner, not a vendor." },
-    { gx: 36, gy: 9, name: "The operator edge", role: "15 years of instinct as infrastructure", portrait: "investor", hue: 220, beat: "did",
+    { gx: 30, gy: 9, name: "The operator edge", role: "15 years of instinct as infrastructure", portrait: "investor", hue: 220, beat: "did",
       quote: "Every company I built compounds into the next.\n\nIterate is the first time I've been able to deploy the full stack at once — brand, growth, technology, taste." },
-    { gx: 52, gy: 9, name: "What AI doesn't replace", role: "Why taste still wins", portrait: "fan", hue: 195, beat: "learned",
+    { gx: 40, gy: 9, name: "What AI doesn't replace", role: "Why taste still wins", portrait: "fan", hue: 195, beat: "learned",
       quote: "AI amplifies people who already know what they're doing.\n\nEvery year of experience becomes a prompt. Every mistake becomes a guardrail." },
-    { gx: 62, gy: 9, name: "Working with us", role: "Small number of founder partners", portrait: "founder", hue: 205, beat: "did",
+    { gx: 46, gy: 9, name: "Working with us", role: "Small number of founder partners", portrait: "founder", hue: 205, beat: "did",
       quote: "We take a small number of founder partners per quarter.\n\nIf you want a marketing agency that thinks like an operator — reach out." },
   ],
   clipping: { gx: 14, gy: 9, title: "AI-native, now", source: "Iterate · Now",
